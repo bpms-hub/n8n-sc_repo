@@ -1,0 +1,657 @@
+{
+  "name": "Week 3 - Multi-Agent Lead Classifier",
+  "nodes": [
+    {
+      "parameters": {
+        "formTitle": "Contact form",
+        "formFields": {
+          "values": [
+            {
+              "fieldLabel": "Name",
+              "requiredField": true
+            },
+            {
+              "fieldLabel": "Email",
+              "fieldType": "email",
+              "requiredField": true
+            },
+            {
+              "fieldLabel": "Describe your project",
+              "requiredField": true
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.formTrigger",
+      "typeVersion": 2.2,
+      "position": [
+        -340,
+        60
+      ],
+      "id": "cb262f9b-a500-4adf-bcbb-b62ca207be41",
+      "name": "On form submission",
+      "webhookId": "3d0090b3-e306-4d3c-965b-a473cbbe1851"
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "1S9S3gRrbrR9mo1V9jChuJYX-ZF3-RY2bhXU2EkEx42A",
+          "mode": "list",
+          "cachedResultName": "n8n form week 3",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1S9S3gRrbrR9mo1V9jChuJYX-ZF3-RY2bhXU2EkEx42A/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Sheet1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1S9S3gRrbrR9mo1V9jChuJYX-ZF3-RY2bhXU2EkEx42A/edit#gid=0"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Name": "={{ $json.Name }}",
+            "Email": "={{ $json.Email }}",
+            "Description": "={{ $json['Describe your project'] }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "Name",
+              "displayName": "Name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Email",
+              "displayName": "Email",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Description",
+              "displayName": "Description",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.5,
+      "position": [
+        -120,
+        60
+      ],
+      "id": "33b92271-1951-4d3c-aa53-d6a4ddd51fdc",
+      "name": "Google Sheets",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "3BFHwe1w6AmBI0Nw",
+          "name": "Google Sheets account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=You are an AI classifier who only responds in specific terms. Here is the inquiry I received from a potential client:\n{{ $('On form submission').item.json['Describe your project'] }}\n\n- Always respond in one of those three classes: \"Agent\", \"Dashboard\", \"Other\"\n\n- Never respond with anything else besides the three classes mentioned above.\n\nYour role will be to feed these classes as input to the next AI Agent\n",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 1.9,
+      "position": [
+        100,
+        60
+      ],
+      "id": "f457576e-502f-4b0e-9f87-0a1200a73563",
+      "name": "AI Agent"
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "mode": "list",
+          "value": "gpt-4o-mini"
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.2,
+      "position": [
+        188,
+        280
+      ],
+      "id": "3585114b-ee9b-42f4-8eab-9d127bd67d88",
+      "name": "OpenAI Chat Model",
+      "credentials": {
+        "openAiApi": {
+          "id": "IsG9HGNKqz0vaS6D",
+          "name": "OpenAi account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.output }}",
+                    "rightValue": "Agent",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    },
+                    "id": "01a6ceb1-d14d-48e5-9fc6-4afff95cbfb7"
+                  }
+                ],
+                "combinator": "and"
+              }
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "433e5674-70ad-4a89-a16a-47ad56114677",
+                    "leftValue": "={{ $json.output }}",
+                    "rightValue": "Dashboard",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals",
+                      "name": "filter.operator.equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              }
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "849cd424-7802-4e41-a9c9-b8302183cbd4",
+                    "leftValue": "={{ $json.output }}",
+                    "rightValue": "Other",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals",
+                      "name": "filter.operator.equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              }
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.2,
+      "position": [
+        476,
+        60
+      ],
+      "id": "feadf6a6-a98a-41a5-b41d-465b3a8e4958",
+      "name": "Switch"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=You are an AI Agent that sends emails to my technical AI agent business development team:\n\nPlease craft a simple email to my colleague explaining this new client lead that we received while also providing them with next steps on how to do deal with it.\n\nClient name: {{ $('On form submission').item.json.Name }}\nClient email: {{ $('On form submission').item.json.Email }}\nClient inquiry: {{ $('On form submission').item.json['Describe your project'] }}\n\n- Never include subjects in your generated text email\n- Never use markdown or HTML\n\n- Always include the potential client information\n- Alway sign the email as \"Ibraheem\"",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 1.9,
+      "position": [
+        696,
+        -440
+      ],
+      "id": "4db69165-6dbc-4f7c-b706-cda2f0c1195e",
+      "name": "AI Agent1"
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "mode": "list",
+          "value": "gpt-4o-mini"
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.2,
+      "position": [
+        784,
+        -220
+      ],
+      "id": "bda962d2-fbd7-4261-8b07-7b10b0f86939",
+      "name": "OpenAI Chat Model1",
+      "credentials": {
+        "openAiApi": {
+          "id": "IsG9HGNKqz0vaS6D",
+          "name": "OpenAi account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=You are an AI Agent that sends emails to my technical Dashboard business development team:\n\nPlease craft a simple email to my colleague explaining this new client lead that we received while also providing them with next steps on how to do deal with it.\n\nClient name: {{ $('On form submission').item.json.Name }}\nClient email: {{ $('On form submission').item.json.Email }}\nClient inquiry: {{ $('On form submission').item.json['Describe your project'] }}\n\n- Never include subjects in your generated text email\n- Never use markdown or HTML\n\n- Always include the potential client information\n- Alway sign the email as \"Ibraheem\"",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 1.9,
+      "position": [
+        696,
+        -40
+      ],
+      "id": "3459b712-d889-498a-a2da-b2b565e20373",
+      "name": "AI Agent2"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=You are an AI Agent that sends emails to my potential clients.\n\nPlease craft a clear email to clients here explain that his following inquiry doesn't match our expertise and speciality in AI Agents & data Dashboards. Here's his info:\n\nClient name: {{ $('On form submission').item.json.Name }}\nClient email: {{ $('On form submission').item.json.Email }}\nClient inquiry: {{ $('On form submission').item.json['Describe your project'] }}\n\n- Never include subjects in your generated text email\n- Never use Markdown or HTML\n\n- Always include the potential client information\n- Always address the client with their name at the beginning of the email\n- Always sign the email as \"Ibraheem\"",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 1.9,
+      "position": [
+        696,
+        460
+      ],
+      "id": "72d8beed-08fe-41d0-94dc-c94bbb262140",
+      "name": "AI Agent3"
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "mode": "list",
+          "value": "gpt-4o-mini"
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.2,
+      "position": [
+        784,
+        180
+      ],
+      "id": "b36869ea-212c-46a5-a56b-b6435a42ed1e",
+      "name": "OpenAI Chat Model2",
+      "credentials": {
+        "openAiApi": {
+          "id": "IsG9HGNKqz0vaS6D",
+          "name": "OpenAi account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "mode": "list",
+          "value": "gpt-4o-mini"
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.2,
+      "position": [
+        784,
+        680
+      ],
+      "id": "a9db687b-31c8-4ca8-a705-a0129c229e47",
+      "name": "OpenAI Chat Model3",
+      "credentials": {
+        "openAiApi": {
+          "id": "IsG9HGNKqz0vaS6D",
+          "name": "OpenAi account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "sendTo": "ibraheem@lonelyoctopus.com",
+        "subject": "New AI Agent Lead",
+        "emailType": "text",
+        "message": "={{ $json.output }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [
+        1060,
+        -440
+      ],
+      "id": "5dfbcc03-976e-45c8-bc5a-4868ca002581",
+      "name": "Gmail",
+      "webhookId": "7e3161bc-df5c-4670-9073-db9f2d9b1ce0",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "IDgnUJjLNchF9d8a",
+          "name": "Gmail account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "completion",
+        "completionTitle": "=Thank you for your inquiry  {{ $('On form submission').item.json.Name }}!",
+        "completionMessage": "Our team will be reaching out to you ASAP!",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.form",
+      "typeVersion": 1,
+      "position": [
+        1280,
+        -440
+      ],
+      "id": "eba87bfb-d838-48b0-b7bf-cbda67f935e9",
+      "name": "Form",
+      "webhookId": "e65a5fbe-ae9c-4de8-adad-44fe7ed715aa"
+    },
+    {
+      "parameters": {
+        "sendTo": "ibraheem@lonelyoctopus.com",
+        "subject": "New Dashboard lead",
+        "emailType": "text",
+        "message": "={{ $json.output }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [
+        1060,
+        -40
+      ],
+      "id": "b4c817d4-1513-435f-909a-3e327a62c53c",
+      "name": "Gmail1",
+      "webhookId": "989b2223-d095-4afd-aa4e-01ce8ef1c8c5",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "IDgnUJjLNchF9d8a",
+          "name": "Gmail account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "completion",
+        "completionTitle": "=Thank you for your inquiry  {{ $('On form submission').item.json.Name }}!",
+        "completionMessage": "Our team will be reaching out to you ASAP!",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.form",
+      "typeVersion": 1,
+      "position": [
+        1280,
+        -40
+      ],
+      "id": "7a6a213e-f7c6-42b0-9a0e-11dfc082aa18",
+      "name": "Form1",
+      "webhookId": "494bc9d8-c4e8-4273-a3ab-42a9d881d7ce"
+    },
+    {
+      "parameters": {
+        "sendTo": "={{ $('On form submission').item.json.Email }}",
+        "subject": "=Dear  {{ $('On form submission').item.json.Name }}, here's a response to your inquiry",
+        "emailType": "text",
+        "message": "={{ $json.output }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [
+        1060,
+        460
+      ],
+      "id": "395475b3-c6a0-4ace-8b5a-e91b61a2dc3d",
+      "name": "Gmail2",
+      "webhookId": "274c9fd8-1e74-4762-83a1-1ae5f43ca144",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "IDgnUJjLNchF9d8a",
+          "name": "Gmail account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "completion",
+        "completionTitle": "=Thank you for your inquiry  {{ $('On form submission').item.json.Name }}!",
+        "completionMessage": "Our team will be reaching out to you ASAP!",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.form",
+      "typeVersion": 1,
+      "position": [
+        1280,
+        460
+      ],
+      "id": "13da25dc-f2ac-4098-909e-77f5d7587f61",
+      "name": "Form2",
+      "webhookId": "bbafccec-9631-4e34-ba59-4596001516e1"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "On form submission": {
+      "main": [
+        [
+          {
+            "node": "Google Sheets",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Sheets": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent": {
+      "main": [
+        [
+          {
+            "node": "Switch",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Switch": {
+      "main": [
+        [
+          {
+            "node": "AI Agent1",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "AI Agent2",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "AI Agent3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI Chat Model1": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent1",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI Chat Model2": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent2",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI Chat Model3": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent3",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent1": {
+      "main": [
+        [
+          {
+            "node": "Gmail",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent2": {
+      "main": [
+        [
+          {
+            "node": "Gmail1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent3": {
+      "main": [
+        [
+          {
+            "node": "Gmail2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Gmail": {
+      "main": [
+        [
+          {
+            "node": "Form",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Gmail1": {
+      "main": [
+        [
+          {
+            "node": "Form1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Gmail2": {
+      "main": [
+        [
+          {
+            "node": "Form2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "fe497473-d065-4128-8aad-69152c250c85",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "67093649c28f4a2795d23b6aa0c121af2bf9e9fb8dd7be2569475b7f9e0f35a5"
+  },
+  "id": "SUoLMCyCMZ6noEa5",
+  "tags": []
+}
