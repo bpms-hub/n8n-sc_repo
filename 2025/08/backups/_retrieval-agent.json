@@ -1,0 +1,89 @@
+{
+  "createdAt": "2025-08-11T17:45:42.163Z",
+  "updatedAt": "2025-08-11T17:53:11.000Z",
+  "id": "TNp6uYkxV1AopEvX",
+  "name": "_Retrieval Agent",
+  "active": false,
+  "isArchived": false,
+  "nodes": [
+    {
+      "parameters": {},
+      "id": "c055762a-8fe7-4141-a639-df2372f30060",
+      "typeVersion": 1.1,
+      "name": "Call Retrieval Agent",
+      "type": "n8n-nodes-base.executeWorkflowTrigger",
+      "position": [
+        272,
+        352
+      ]
+    },
+    {
+      "parameters": {
+        "model": "openai/gpt-5-mini",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenRouter",
+      "typeVersion": 1,
+      "position": [
+        352,
+        560
+      ],
+      "id": "6c8c1e95-acd9-43c7-8092-93c4a5c40d7d",
+      "name": "OpenRouter Chat Model",
+      "credentials": {
+        "openRouterApi": {
+          "id": "jQR7uGa0YGZ17Ov7",
+          "name": "OpenRouter account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 2.1,
+      "position": [
+        480,
+        352
+      ],
+      "id": "c256c545-36d3-4d79-88e8-a931888dc05f",
+      "name": "Retrieval Agent"
+    }
+  ],
+  "connections": {
+    "Call Retrieval Agent": {
+      "main": [
+        [
+          {
+            "node": "Retrieval Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenRouter Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Retrieval Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": null,
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "pinData": {},
+  "versionId": "2cc7bc06-ef59-420b-8ca8-e37bda457513",
+  "triggerCount": 0,
+  "tags": []
+}
