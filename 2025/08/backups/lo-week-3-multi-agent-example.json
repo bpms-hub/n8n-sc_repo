@@ -1,0 +1,688 @@
+{
+  "createdAt": "2025-08-07T15:06:01.540Z",
+  "updatedAt": "2025-08-08T21:46:24.000Z",
+  "id": "IQAOPb0R1xM1sROs",
+  "name": "LO Week 3 Multi-Agent Example",
+  "active": false,
+  "isArchived": false,
+  "nodes": [
+    {
+      "parameters": {
+        "formTitle": "Contact form",
+        "formFields": {
+          "values": [
+            {
+              "fieldLabel": "Name",
+              "requiredField": true
+            },
+            {
+              "fieldLabel": "Email",
+              "fieldType": "email",
+              "requiredField": true
+            },
+            {
+              "fieldLabel": "Describe your project",
+              "requiredField": true
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.formTrigger",
+      "typeVersion": 2.2,
+      "position": [
+        -1280,
+        512
+      ],
+      "id": "498d646d-aa6a-475e-b607-a3057003192f",
+      "name": "On form submission",
+      "webhookId": "3d0090b3-e306-4d3c-965b-a473cbbe1851"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=You are an AI classifier who only responds in specific terms. Here is the inquiry I received from a potential client:\n{{ $('On form submission').item.json['Describe your project'] }}\n\n- Always respond in one of those three classes: \"Agent\", \"Dashboard\", \"Other\"\n\n- Never respond with anything else besides the three classes mentioned above.\n\nYour role will be to feed these classes as input to the next AI Agent\n",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 1.9,
+      "position": [
+        -736,
+        512
+      ],
+      "id": "6dec1580-2eb4-45b4-ba47-4a022132764f",
+      "name": "AI Agent"
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.output }}",
+                    "rightValue": "Agent",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    },
+                    "id": "01a6ceb1-d14d-48e5-9fc6-4afff95cbfb7"
+                  }
+                ],
+                "combinator": "and"
+              }
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "433e5674-70ad-4a89-a16a-47ad56114677",
+                    "leftValue": "={{ $json.output }}",
+                    "rightValue": "Dashboard",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals",
+                      "name": "filter.operator.equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              }
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "849cd424-7802-4e41-a9c9-b8302183cbd4",
+                    "leftValue": "={{ $json.output }}",
+                    "rightValue": "Other",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals",
+                      "name": "filter.operator.equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              }
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.2,
+      "position": [
+        -192,
+        496
+      ],
+      "id": "a0036875-3d86-408b-9922-035d619a43e9",
+      "name": "Switch"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=You are an AI Agent that sends emails to my technical AI agent business development team:\n\nPlease craft a simple email to my colleague explaining this new client lead that we received while also providing them with next steps on how to do deal with it.\n\nClient name: {{ $('On form submission').item.json.Name }}\nClient email: {{ $('On form submission').item.json.Email }}\nClient inquiry: {{ $('On form submission').item.json['Describe your project'] }}\n\n- Never include subjects in your generated text email\n- Never use markdown or HTML\n\n- Always include the potential client information\n- Alway sign the email as \"Ibraheem\"",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 1.9,
+      "position": [
+        32,
+        0
+      ],
+      "id": "37c095de-cdf4-4fa3-a350-2fd935b47259",
+      "name": "AI Agent1"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=You are an AI Agent that sends emails to my technical Dashboard business development team:\n\nPlease craft a simple email to my colleague explaining this new client lead that we received while also providing them with next steps on how to do deal with it.\n\nClient name: {{ $('On form submission').item.json.Name }}\nClient email: {{ $('On form submission').item.json.Email }}\nClient inquiry: {{ $('On form submission').item.json['Describe your project'] }}\n\n- Never include subjects in your generated text email\n- Never use markdown or HTML\n\n- Always include the potential client information\n- Alway sign the email as \"Ibraheem\"",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 1.9,
+      "position": [
+        32,
+        400
+      ],
+      "id": "89ec6cfe-af13-458e-b244-5058debecf25",
+      "name": "AI Agent2"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=You are an AI Agent that sends emails to my potential clients.\n\nPlease craft a clear email to clients here explain that his following inquiry doesn't match our expertise and speciality in AI Agents & data Dashboards. Here's his info:\n\nClient name: {{ $('On form submission').item.json.Name }}\nClient email: {{ $('On form submission').item.json.Email }}\nClient inquiry: {{ $('On form submission').item.json['Describe your project'] }}\n\n- Never include subjects in your generated text email\n- Never use Markdown or HTML\n\n- Always include the potential client information\n- Always address the client with their name at the beginning of the email\n- Always sign the email as \"Ibraheem\"",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 1.9,
+      "position": [
+        32,
+        912
+      ],
+      "id": "a51baa9b-9980-4362-87aa-2cb87e5e53a7",
+      "name": "AI Agent3"
+    },
+    {
+      "parameters": {
+        "operation": "completion",
+        "completionTitle": "=Thank you for your inquiry  {{ $('On form submission').item.json.Name }}!",
+        "completionMessage": "Our team will be reaching out to you ASAP!",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.form",
+      "typeVersion": 1,
+      "position": [
+        656,
+        112
+      ],
+      "id": "b08878f0-43c5-4184-a22e-133fe1fab23a",
+      "name": "Form",
+      "webhookId": "e65a5fbe-ae9c-4de8-adad-44fe7ed715aa"
+    },
+    {
+      "parameters": {
+        "operation": "completion",
+        "completionTitle": "=Thank you for your inquiry  {{ $('On form submission').item.json.Name }}!",
+        "completionMessage": "Our team will be reaching out to you ASAP!",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.form",
+      "typeVersion": 1,
+      "position": [
+        656,
+        512
+      ],
+      "id": "aa09264c-8d72-4e6f-8118-b07ee9ab7927",
+      "name": "Form1",
+      "webhookId": "494bc9d8-c4e8-4273-a3ab-42a9d881d7ce"
+    },
+    {
+      "parameters": {
+        "operation": "completion",
+        "completionTitle": "=Thank you for your inquiry  {{ $('On form submission').item.json.Name }}!",
+        "completionMessage": "Our team will be reaching out to you ASAP!",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.form",
+      "typeVersion": 1,
+      "position": [
+        656,
+        912
+      ],
+      "id": "68b525d1-6aae-47bc-9aac-3c9c7469d0da",
+      "name": "Form2",
+      "webhookId": "bbafccec-9631-4e34-ba59-4596001516e1"
+    },
+    {
+      "parameters": {
+        "model": "openai/gpt-5-nano",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenRouter",
+      "typeVersion": 1,
+      "position": [
+        -736,
+        720
+      ],
+      "id": "1cb51459-b105-4d74-94c8-e097867f2c98",
+      "name": "OpenRouter Chat Model",
+      "credentials": {
+        "openRouterApi": {
+          "id": "jQR7uGa0YGZ17Ov7",
+          "name": "OpenRouter account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "model": "openai/gpt-5-nano",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenRouter",
+      "typeVersion": 1,
+      "position": [
+        128,
+        224
+      ],
+      "id": "163df9f0-9b1f-4b89-baa1-c6c9928077cc",
+      "name": "OpenRouter Chat Model1",
+      "credentials": {
+        "openRouterApi": {
+          "id": "jQR7uGa0YGZ17Ov7",
+          "name": "OpenRouter account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "model": "openai/gpt-5-nano",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenRouter",
+      "typeVersion": 1,
+      "position": [
+        128,
+        624
+      ],
+      "id": "01e49e71-07f9-4d0d-86ac-2c37de10ed1e",
+      "name": "OpenRouter Chat Model2",
+      "credentials": {
+        "openRouterApi": {
+          "id": "jQR7uGa0YGZ17Ov7",
+          "name": "OpenRouter account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "model": "openai/gpt-5-nano",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenRouter",
+      "typeVersion": 1,
+      "position": [
+        128,
+        1136
+      ],
+      "id": "6c357b8c-f108-43f5-84c3-046860cf6ef8",
+      "name": "OpenRouter Chat Model3",
+      "credentials": {
+        "openRouterApi": {
+          "id": "jQR7uGa0YGZ17Ov7",
+          "name": "OpenRouter account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "sendTo": "beepiams@gmail.com",
+        "subject": "New AI Agent Lead",
+        "emailType": "text",
+        "message": "={{ $json.output }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [
+        432,
+        112
+      ],
+      "id": "d9919cfd-2d97-44e6-a6a6-f5b33eac8294",
+      "name": "Send a message",
+      "webhookId": "7e3161bc-df5c-4670-9073-db9f2d9b1ce0",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "bQvnHcTvkeJSh8m2",
+          "name": "Gmail account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "sendTo": "beepiams@gmail.com",
+        "subject": "New Dashboard lead",
+        "emailType": "text",
+        "message": "={{ $json.output }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [
+        432,
+        512
+      ],
+      "id": "8ecdfac1-7191-4dbd-8dbd-d9625a39ab12",
+      "name": "Send a message1",
+      "webhookId": "989b2223-d095-4afd-aa4e-01ce8ef1c8c5",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "bQvnHcTvkeJSh8m2",
+          "name": "Gmail account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "sendTo": "={{ $('On form submission').item.json.Email }}",
+        "subject": "=Dear  {{ $('On form submission').item.json.Name }}, here's a response to your inquiry",
+        "emailType": "text",
+        "message": "={{ $json.output }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [
+        432,
+        912
+      ],
+      "id": "f5dd6540-9138-4c03-b7d3-4492f36dfc5f",
+      "name": "Send a message2",
+      "webhookId": "274c9fd8-1e74-4762-83a1-1ae5f43ca144",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "bQvnHcTvkeJSh8m2",
+          "name": "Gmail account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "appendOrUpdate",
+        "documentId": {
+          "__rl": true,
+          "value": "1eQ1AuFn9zsg3oI6WiahNKMLvzplcNnRoqTFVBrbIZ9Y",
+          "mode": "list",
+          "cachedResultName": "n8n - Job Search",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1eQ1AuFn9zsg3oI6WiahNKMLvzplcNnRoqTFVBrbIZ9Y/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 800564947,
+          "mode": "list",
+          "cachedResultName": "n8n-week 3",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1eQ1AuFn9zsg3oI6WiahNKMLvzplcNnRoqTFVBrbIZ9Y/edit#gid=800564947"
+        },
+        "columns": {
+          "mappingMode": "autoMapInputData",
+          "value": {},
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "Name",
+              "displayName": "Name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Email",
+              "displayName": "Email",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Describe your project",
+              "displayName": "Describe your project",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "submittedAt",
+              "displayName": "submittedAt",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "formMode",
+              "displayName": "formMode",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.5,
+      "position": [
+        -1056,
+        512
+      ],
+      "id": "e9376345-8ebc-41fc-a8e1-c244ff61fd61",
+      "name": "Append or update row in sheet",
+      "alwaysOutputData": true,
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "kOeJv9ACT74Bk3jB",
+          "name": "Google Sheets account"
+        }
+      }
+    }
+  ],
+  "connections": {
+    "On form submission": {
+      "main": [
+        [
+          {
+            "node": "Append or update row in sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent": {
+      "main": [
+        [
+          {
+            "node": "Switch",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Switch": {
+      "main": [
+        [
+          {
+            "node": "AI Agent1",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "AI Agent2",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "AI Agent3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent1": {
+      "main": [
+        [
+          {
+            "node": "Send a message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent2": {
+      "main": [
+        [
+          {
+            "node": "Send a message1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent3": {
+      "main": [
+        [
+          {
+            "node": "Send a message2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenRouter Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenRouter Chat Model1": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent1",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenRouter Chat Model2": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent2",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenRouter Chat Model3": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent3",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send a message": {
+      "main": [
+        [
+          {
+            "node": "Form",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send a message1": {
+      "main": [
+        [
+          {
+            "node": "Form1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send a message2": {
+      "main": [
+        [
+          {
+            "node": "Form2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Append or update row in sheet": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": null,
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "pinData": {
+    "On form submission": [
+      {
+        "json": {
+          "Name": "Beep Iams",
+          "Email": "beepiams@gmail.com",
+          "Describe your project": "Bar Management Tool",
+          "submittedAt": "2025-08-08T16:55:19.491-04:00",
+          "formMode": "test"
+        }
+      }
+    ],
+    "Append or update row in sheet": [
+      {
+        "json": {
+          "Name": "Beep Iams",
+          "Email": "beepiams@gmail.com",
+          "Describe your project": "Bar Management Tool",
+          "submittedAt": "2025-08-08T16:55:19.491-04:00",
+          "formMode": "test"
+        }
+      }
+    ]
+  },
+  "versionId": "aa86b681-16ba-4d1d-8b60-31a7ba48f53f",
+  "triggerCount": 0,
+  "tags": []
+}
