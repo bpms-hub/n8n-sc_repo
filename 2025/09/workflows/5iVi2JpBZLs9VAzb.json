@@ -1,0 +1,695 @@
+{
+  "active": false,
+  "connections": {
+    "Schedule Trigger": {
+      "main": [
+        [
+          {
+            "node": "Get Media URL",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get Media URL": {
+      "main": [
+        [
+          {
+            "node": "Google Drive ID",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Upload media": {
+      "main": [
+        [
+          {
+            "node": "Instagram",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "TikTok",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Bluesky",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Facebook",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "LinkedIn",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Pinterest",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Threads",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "X",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "YouTube",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Done",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Error",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Drive ID": {
+      "main": [
+        [
+          {
+            "node": "Upload media",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "createdAt": "2025-08-13T19:51:50.337Z",
+  "id": "5iVi2JpBZLs9VAzb",
+  "isArchived": false,
+  "meta": null,
+  "name": "_Blotato Social Media",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {}
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        272,
+        -128
+      ],
+      "id": "8a770450-935f-45be-8bc5-e8b5e26a2d1f",
+      "name": "Schedule Trigger"
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "1kiBPFHBWQOWq5zb_6KOcQxRy-PKA3ectsPSjw3ArnQ4",
+          "mode": "list",
+          "cachedResultName": "Blotato Posting",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1kiBPFHBWQOWq5zb_6KOcQxRy-PKA3ectsPSjw3ArnQ4/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Sheet1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1kiBPFHBWQOWq5zb_6KOcQxRy-PKA3ectsPSjw3ArnQ4/edit#gid=0"
+        },
+        "filtersUI": {
+          "values": [
+            {
+              "lookupColumn": "Status",
+              "lookupValue": "Ready To Post"
+            }
+          ]
+        },
+        "options": {
+          "returnFirstMatch": true
+        }
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.6,
+      "position": [
+        400,
+        -128
+      ],
+      "id": "d945245c-f716-4cd6-a3a6-b46f473f9bc5",
+      "name": "Get Media URL"
+    },
+    {
+      "parameters": {
+        "resource": "media",
+        "mediaUrl": "=https://drive.google.com/uc?export=download&id={{ $('Google Drive ID').item.json.mediaID }}"
+      },
+      "type": "@blotato/n8n-nodes-blotato.blotato",
+      "typeVersion": 2,
+      "position": [
+        400,
+        160
+      ],
+      "id": "89cf1427-02d1-4b6b-94c3-9bb9d367dac4",
+      "name": "Upload media",
+      "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": {
+        "accountId": {
+          "__rl": true,
+          "mode": "list",
+          "value": ""
+        },
+        "postContentText": "={{ $('Get Media URL').item.json.Title }}\n\n{{ $('Get Media URL').item.json.Caption }}",
+        "postContentMediaUrls": "={{ $json.url }}",
+        "options": {}
+      },
+      "type": "@blotato/n8n-nodes-blotato.blotato",
+      "typeVersion": 2,
+      "position": [
+        688,
+        -160
+      ],
+      "id": "f9de84d2-02fe-4a5b-b429-c9aa7e164ced",
+      "name": "Instagram"
+    },
+    {
+      "parameters": {
+        "platform": "tiktok",
+        "accountId": {
+          "__rl": true,
+          "mode": "list",
+          "value": ""
+        },
+        "postContentText": "={{ $('Get Media URL').item.json.Title }}\n\n{{ $('Get Media URL').item.json.Caption }}",
+        "postContentMediaUrls": "={{ $json.url }}",
+        "postCreateTiktokOptionIsAiGenerated": true,
+        "options": {}
+      },
+      "type": "@blotato/n8n-nodes-blotato.blotato",
+      "typeVersion": 2,
+      "position": [
+        688,
+        32
+      ],
+      "id": "059a9c50-4b0f-4813-ae72-432dfb0eb47d",
+      "name": "TikTok"
+    },
+    {
+      "parameters": {
+        "platform": "bluesky",
+        "accountId": {
+          "__rl": true,
+          "mode": "list",
+          "value": ""
+        },
+        "postContentText": "={{ $('Get Media URL').item.json.Title }}\n\n{{ $('Get Media URL').item.json.Caption }}",
+        "postContentMediaUrls": "={{ $json.url }}",
+        "options": {}
+      },
+      "type": "@blotato/n8n-nodes-blotato.blotato",
+      "typeVersion": 2,
+      "position": [
+        688,
+        208
+      ],
+      "id": "905e8452-60a8-4bd1-a806-44bafb0a1b44",
+      "name": "Bluesky"
+    },
+    {
+      "parameters": {
+        "platform": "facebook",
+        "accountId": {
+          "__rl": true,
+          "mode": "list",
+          "value": ""
+        },
+        "postContentText": "={{ $('Get Media URL').item.json.Title }}\n\n{{ $('Get Media URL').item.json.Caption }}",
+        "postContentMediaUrls": "={{ $json.url }}",
+        "facebookPageId": {
+          "__rl": true,
+          "value": "100736243104879",
+          "mode": "list",
+          "cachedResultName": "AI Automation Society",
+          "cachedResultUrl": "https://backend.blotato.com/v2/accounts/3879/subaccounts/100736243104879"
+        },
+        "options": {}
+      },
+      "type": "@blotato/n8n-nodes-blotato.blotato",
+      "typeVersion": 2,
+      "position": [
+        896,
+        -160
+      ],
+      "id": "46d932e7-183a-41cf-bcba-e222c94588cf",
+      "name": "Facebook"
+    },
+    {
+      "parameters": {
+        "platform": "linkedin",
+        "accountId": {
+          "__rl": true,
+          "mode": "list",
+          "value": ""
+        },
+        "postContentText": "={{ $('Get Media URL').item.json.Title }}\n\n{{ $('Get Media URL').item.json.Caption }}",
+        "postContentMediaUrls": "={{ $json.url }}",
+        "options": {}
+      },
+      "type": "@blotato/n8n-nodes-blotato.blotato",
+      "typeVersion": 2,
+      "position": [
+        896,
+        32
+      ],
+      "id": "041e6c7a-fb61-4bfa-8cd7-1f1667008896",
+      "name": "LinkedIn"
+    },
+    {
+      "parameters": {
+        "platform": "pinterest",
+        "accountId": {
+          "__rl": true,
+          "mode": "list",
+          "value": ""
+        },
+        "postContentText": "={{ $('Get Media URL').item.json.Title }}\n\n{{ $('Get Media URL').item.json.Caption }}",
+        "postContentMediaUrls": "={{ $json.url }}",
+        "pinterestBoardId": {
+          "__rl": true,
+          "value": "1134273924840305908",
+          "mode": "id"
+        },
+        "options": {}
+      },
+      "type": "@blotato/n8n-nodes-blotato.blotato",
+      "typeVersion": 2,
+      "position": [
+        896,
+        208
+      ],
+      "id": "e3036121-2217-437c-8896-ea125e2d27d2",
+      "name": "Pinterest"
+    },
+    {
+      "parameters": {
+        "platform": "threads",
+        "accountId": {
+          "__rl": true,
+          "mode": "list",
+          "value": ""
+        },
+        "postContentText": "={{ $('Get Media URL').item.json.Title }}\n\n{{ $('Get Media URL').item.json.Caption }}",
+        "postContentMediaUrls": "={{ $json.url }}",
+        "options": {}
+      },
+      "type": "@blotato/n8n-nodes-blotato.blotato",
+      "typeVersion": 2,
+      "position": [
+        1104,
+        -160
+      ],
+      "id": "73892b71-e771-4d41-a55c-5a9dae0c4cf5",
+      "name": "Threads"
+    },
+    {
+      "parameters": {
+        "platform": "twitter",
+        "accountId": {
+          "__rl": true,
+          "mode": "list",
+          "value": ""
+        },
+        "postContentText": "={{ $('Get Media URL').item.json.Title }}\n\n{{ $('Get Media URL').item.json.Caption }}",
+        "postContentMediaUrls": "={{ $json.url }}",
+        "options": {}
+      },
+      "type": "@blotato/n8n-nodes-blotato.blotato",
+      "typeVersion": 2,
+      "position": [
+        1104,
+        32
+      ],
+      "id": "ab02cf61-5b52-4c79-a0a2-f0f36b01d4d9",
+      "name": "X"
+    },
+    {
+      "parameters": {
+        "platform": "youtube",
+        "accountId": {
+          "__rl": true,
+          "mode": "list",
+          "value": ""
+        },
+        "postContentText": "={{ $('Get Media URL').item.json.Caption }}",
+        "postContentMediaUrls": "={{ $json.url }}",
+        "postCreateYoutubeOptionTitle": "={{ $('Get Media URL').item.json.Title }}",
+        "postCreateYoutubeOptionShouldNotifySubscribers": false,
+        "options": {}
+      },
+      "type": "@blotato/n8n-nodes-blotato.blotato",
+      "typeVersion": 2,
+      "position": [
+        1104,
+        208
+      ],
+      "id": "c1b58b7e-f00f-403d-9674-5301c5573faa",
+      "name": "YouTube"
+    },
+    {
+      "parameters": {
+        "content": "# 🛠️ Setup Guide  \n*Author: [Nate Herk](https://www.youtube.com/@nateherk)*\n\nFollow these steps to get your [Blotato](https://blotato.com/?ref=nate) integration up and running in n8n:\n\n### ✅ Step 1: Create a [Blotato](https://blotato.com/?ref=nate) Account  \nGo to [Blotato](https://blotato.com/?ref=nate) and create an account.  \nUse **code:** `NATE30` for **30% off for six months**.\n\n### 🔐 Step 2: Add Your API Key  \nAfter setting up your [Blotato](https://blotato.com/?ref=nate) account, copy your **Blotato API key**  \nand create a new credential in the Blotato nodes.\n\n### 🔗 Step 3: Connect Social Accounts  \nLog in to the social accounts you want to use with [Blotato](https://blotato.com/?ref=nate).  \n\n### 📄 Step 4: Set Up Your Google Sheet  \n1. Download the [Google Sheet Template](https://docs.google.com/spreadsheets/d/1csPrRbHBbudiI4Gty5lDC6XAn8MabVcv1F-HDvJvx8M/copy)  \n2. Make a **copy** of it to your own Google Drive  \n3. Begin filling in your media content for **automated posting**\n\n---\nIf you're having issues with a platform, check out the platform requirements documentation [here](https://help.blotato.com/tips-and-tricks/social-platform-requirements#general-guidelines)\n\nYou're all set! 🎉 Let the automation begin.\n",
+        "height": 620,
+        "width": 560
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -368,
+        -208
+      ],
+      "id": "18471fe2-123b-43f4-873b-e8ee1dccaead",
+      "name": "Sticky Note"
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "documentId": {
+          "__rl": true,
+          "value": "1kiBPFHBWQOWq5zb_6KOcQxRy-PKA3ectsPSjw3ArnQ4",
+          "mode": "list",
+          "cachedResultName": "Blotato Posting",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1kiBPFHBWQOWq5zb_6KOcQxRy-PKA3ectsPSjw3ArnQ4/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Sheet1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1kiBPFHBWQOWq5zb_6KOcQxRy-PKA3ectsPSjw3ArnQ4/edit#gid=0"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Title": "={{ $('Get Media URL').item.json.Title }}",
+            "Status": "Posted"
+          },
+          "matchingColumns": [
+            "Title"
+          ],
+          "schema": [
+            {
+              "id": "Title",
+              "displayName": "Title",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Media URL",
+              "displayName": "Media URL",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Caption",
+              "displayName": "Caption",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Status",
+              "displayName": "Status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "row_number",
+              "displayName": "row_number",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "readOnly": true,
+              "removed": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.6,
+      "position": [
+        1344,
+        -96
+      ],
+      "id": "d28283c8-083d-4344-8cc7-1df30e7e8b77",
+      "name": "Done"
+    },
+    {
+      "parameters": {
+        "content": "## Pull in Media\n",
+        "height": 260,
+        "width": 360,
+        "color": 4
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        208,
+        -208
+      ],
+      "id": "aae8160c-e1b0-4a65-bb26-c4005f1040f3",
+      "name": "Sticky Note1"
+    },
+    {
+      "parameters": {
+        "content": "## Google Drive Files\n\n\n",
+        "height": 260,
+        "width": 360,
+        "color": 2
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        208,
+        80
+      ],
+      "id": "2157b7e2-9efb-42ea-a182-6d5a994765ea",
+      "name": "Google Drive Files"
+    },
+    {
+      "parameters": {
+        "content": "## 9 Socials",
+        "height": 540,
+        "width": 700,
+        "color": 6
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        592,
+        -208
+      ],
+      "id": "917e0ad9-ed34-4788-b618-f0e55a3d9e72",
+      "name": "Sticky Note4"
+    },
+    {
+      "parameters": {
+        "content": "## Mark as Posted",
+        "height": 240,
+        "width": 160
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        1312,
+        -192
+      ],
+      "id": "922891de-5f61-488f-89be-7f1556e7cae5",
+      "name": "Sticky Note2"
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "documentId": {
+          "__rl": true,
+          "value": "1kiBPFHBWQOWq5zb_6KOcQxRy-PKA3ectsPSjw3ArnQ4",
+          "mode": "list",
+          "cachedResultName": "Blotato Posting",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1kiBPFHBWQOWq5zb_6KOcQxRy-PKA3ectsPSjw3ArnQ4/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Sheet1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1kiBPFHBWQOWq5zb_6KOcQxRy-PKA3ectsPSjw3ArnQ4/edit#gid=0"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Title": "={{ $('Get Media URL').item.json.Title }}",
+            "Status": "Errored"
+          },
+          "matchingColumns": [
+            "Title"
+          ],
+          "schema": [
+            {
+              "id": "Title",
+              "displayName": "Title",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Media URL",
+              "displayName": "Media URL",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Caption",
+              "displayName": "Caption",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Status",
+              "displayName": "Status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "row_number",
+              "displayName": "row_number",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "readOnly": true,
+              "removed": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.6,
+      "position": [
+        1344,
+        176
+      ],
+      "id": "5ab989f8-e74b-4331-b420-05425050c8b0",
+      "name": "Error"
+    },
+    {
+      "parameters": {
+        "content": "## Mark as Error",
+        "height": 256,
+        "width": 160,
+        "color": 3
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        1312,
+        80
+      ],
+      "id": "8529a7db-2f31-4bd4-a54a-0f626444da30",
+      "name": "Sticky Note3"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "b454711b-7a0c-46f9-b896-f296bc7aad09",
+              "name": "mediaID",
+              "value": "={{ $json['Media URL'].match(/\\/d\\/([a-zA-Z0-9-_]+)/)?.[1] }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        272,
+        160
+      ],
+      "id": "a76f401c-2b13-48c3-9dfa-3c35b0bc086b",
+      "name": "Google Drive ID"
+    }
+  ],
+  "origin": "n8n",
+  "pinData": {},
+  "repo": {
+    "owner": "bpms-hub",
+    "name": "n8n-vc_repo"
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": null,
+  "tags": [],
+  "triggerCount": 0,
+  "updatedAt": "2025-08-13T19:52:27.000Z",
+  "versionId": "f22fbb40-f715-443a-b3cb-ac3c8bc9a20e"
+}
