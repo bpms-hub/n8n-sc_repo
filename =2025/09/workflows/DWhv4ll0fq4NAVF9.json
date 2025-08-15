@@ -1,0 +1,223 @@
+{
+  "active": false,
+  "connections": {
+    "OpenRouter Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Simple Memory": {
+      "ai_memory": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_memory",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "When chat message received": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "SerpAPI": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent": {
+      "main": [
+        [
+          {
+            "node": "Format Code",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "MCP Client": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Format Code": {
+      "main": [
+        [
+          {
+            "node": "HTML",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "createdAt": "2025-08-01T00:24:28.985Z",
+  "id": "DWhv4ll0fq4NAVF9",
+  "isArchived": false,
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "name": "Week 2 - MCP No-Code - Lonely Octopus",
+  "nodes": [
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=ROLE: You are a creative culinary fusion expert and recipe developer with access to comprehensive cooking databases through MCP Data Vector.\n\nTASK: Your main job is to create detailed, structured recipes that combine ingredients from different cultural cuisines, providing complete cooking guidance with shopping resources.\n\nINPUT: Users will give you requests for fusion recipes, cultural cuisine combinations, or specific cooking challenges that require research and creative recipe development.\n\nCRITICAL REQUIREMENT - RECIPE NAMING: Every response MUST include a creative, evocative recipe name  that captures the essence of the fusion. The name should:\n\n\n- Be a direct recipe title without introductory phrases - Use \"Recipe: Baharat-Spiced Fire Chicken\" NOT \"Recipe: For the Baharat-Spiced Grilled Chicken\"\n- Reflect the cultural fusion (e.g., \"Recipe: Korean-Italian Kimchi Carbonara\" or \"Recipe: Moroccan-Mexican Harissa Street Tacos\")\n- Incorporate key fusion ingredients or techniques (e.g., \"Recipe: Miso-Glazed Peruvian Anticucho\" or \"Recipe: Tandoori-Spiced Nashville Hot Chicken\")\n- Avoid generic descriptions like \"Spiced Grilled Chicken\" - instead create names like \"Recipe: Garam Masala Fire-Kissed Pollo Asado\"\n- Never use phrases like \"For the,\" \"The,\" or other articles at the beginning of the recipe name\n- Never leave the recipe name empty, null, or overly simple\n\nOUTPUT: You should respond with a structured recipe format containing:\n\n\n- A descriptive, culturally-inspired recipe title starting with \"Recipe:\" that tells the fusion story (without \"For the\" or similar phrases)\n- A brief cultural context explanation\n- Organized ingredient sections with clear headings (### Ingredients:)\n- Detailed step-by-step cooking instructions under (### Preparation Instructions:) - each step must be a complete, actionable direction with specific techniques, times, temperatures, and visual cues. Avoid section headers as steps.\n- Estimated preparation time section (### Estimated Preparation Time:)\n- Amazon shopping links for all ingredients (### Amazon Ingredient Links:)\n- Each ingredient list item should start with \"- \" and include quantities\n- Each instruction should be numbered (1., 2., 3., etc.) and contain specific cooking actions, not just section headers\n- Each Amazon link should be formatted as \"- [Ingredient Name]: [URL]\"\n\nCONSTRAINTS: Never provide recipes without complete ingredient lists, preparation steps, timing estimates, and shopping links. Never skip the structured formatting with proper markdown headings.\n\nREMINDERS: Always remember to use the MCP Data Vector to research authentic cultural ingredients and techniques, maintain creative fusion approaches while respecting traditional cooking methods, and ensure every ingredient has a corresponding Amazon search link for user convenience.\n\n{{ $json.chatInput }}",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 2.1,
+      "position": [
+        -384,
+        336
+      ],
+      "id": "2041d37d-2e0b-4ab6-8655-c0ffa8ca943e",
+      "name": "AI Agent"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenRouter",
+      "typeVersion": 1,
+      "position": [
+        -480,
+        560
+      ],
+      "id": "f8264b6f-f603-4a55-b979-5fb227fe24ea",
+      "name": "OpenRouter Chat Model",
+      "credentials": {
+        "openRouterApi": {
+          "id": "jQR7uGa0YGZ17Ov7",
+          "name": "OpenRouter account"
+        }
+      }
+    },
+    {
+      "parameters": {},
+      "type": "@n8n/n8n-nodes-langchain.memoryBufferWindow",
+      "typeVersion": 1.3,
+      "position": [
+        -352,
+        560
+      ],
+      "id": "442cf5b5-3617-40a1-8f72-07fc01852245",
+      "name": "Simple Memory"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.chatTrigger",
+      "typeVersion": 1.1,
+      "position": [
+        -704,
+        336
+      ],
+      "id": "ccba495a-95f2-4d76-9f26-dd1a78e851b1",
+      "name": "When chat message received",
+      "webhookId": "f2ef30e2-1fac-43f1-9bc7-183e964d13b7"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.toolSerpApi",
+      "typeVersion": 1,
+      "position": [
+        -224,
+        560
+      ],
+      "id": "e3980553-fb8a-4fe6-b2e6-819d6fcdb7e4",
+      "name": "SerpAPI",
+      "credentials": {
+        "serpApi": {
+          "id": "HhlmY5MPBHrPTABF",
+          "name": "SerpAPI account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "endpointUrl": "https://d62f580c-8a64-4c40-9663-582ea4a699ba-00-18vsjahncosza.worf.replit.dev/sse"
+      },
+      "type": "@n8n/n8n-nodes-langchain.mcpClientTool",
+      "typeVersion": 1.1,
+      "position": [
+        -96,
+        560
+      ],
+      "id": "58f1e4eb-595c-4cde-a3ae-cf028682597a",
+      "name": "MCP Client",
+      "alwaysOutputData": true
+    },
+    {
+      "parameters": {
+        "html": "<!DOCTYPE html>\n<html lang=\"en\" class=\"scroll-smooth\">\n<head>\n    <meta charset=\"UTF-8\">\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1, maximum-scale=1\">\n    <title>{{ $json.recipe_name || 'Digital Cookbook Recipe' }}</title>\n    <script>\n      // Dark mode initialization based on system preference\n      if (\n        localStorage.theme === \"dark\" ||\n        (!(\"theme\" in localStorage) &&\n          window.matchMedia(\"(prefers-color-scheme: dark)\").matches)\n      ) {\n        document.documentElement.classList.add(\"dark\");\n      } else {\n        document.documentElement.classList.remove(\"dark\");\n      }\n    </script>\n    <style>\n      /* Elegant font pairing using system stack */\n      :root {\n        --brand: 248 60% 58%;\n        --ink: 220 18% 16%;\n        --ink-soft: 220 12% 36%;\n        --paper: 230 35% 97%;\n        --paper-2: 220 20% 98%;\n      }\n      .font-display {\n        font-family: ui-serif, Georgia, Cambria, \"Times New Roman\", Times, serif;\n        letter-spacing: 0.2px;\n      }\n      .font-sans {\n        font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto,\n          Noto Sans, Ubuntu, Cantarell, Helvetica Neue, Arial, \"Apple Color Emoji\",\n          \"Segoe UI Emoji\";\n      }\n      /* Subtle focus ring for accessibility */\n      .focus-ring:focus-visible {\n        outline: none;\n        box-shadow:\n          0 0 0 2px hsl(0 0% 100% / 0.9),\n          0 0 0 4px hsl(var(--brand) / 0.7);\n      }\n      /* Glow animation for CTA button */\n      @keyframes pulseGlow {\n        0% {\n          box-shadow: 0 0 0 0 hsl(var(--brand) / 0.25);\n        }\n        70% {\n          box-shadow: 0 0 0 14px hsl(var(--brand) / 0);\n        }\n        100% {\n          box-shadow: 0 0 0 0 hsl(var(--brand) / 0);\n        }\n      }\n      @keyframes fadeIn {\n        from { opacity: 0; transform: translateY(30px); }\n        to { opacity: 1; transform: translateY(0); }\n      }\n      \n      /* Base styles */\n      * { margin: 0; padding: 0; box-sizing: border-box; }\n      \n      body {\n        font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Noto Sans, Ubuntu, Cantarell, Helvetica Neue, Arial, \"Apple Color Emoji\", \"Segoe UI Emoji\";\n        line-height: 1.6;\n        color: #1e293b;\n        background: linear-gradient(135deg, #f8fafc 0%, #ffffff 50%, #f8fafc 100%);\n        min-height: 100vh;\n        padding: 1rem;\n        animation: fadeIn 0.8s ease-out;\n      }\n      \n      .dark body {\n        color: #f1f5f9;\n        background: linear-gradient(135deg, #020617 0%, #0f172a 50%, #020617 100%);\n      }\n      \n      /* Background flare */\n      .bg-flare {\n        pointer-events: none;\n        position: fixed;\n        inset: 0;\n        z-index: -10;\n        background:\n          radial-gradient(800px 400px at 10% 10%, hsl(248 100% 88% / 0.55), transparent 60%),\n          radial-gradient(700px 420px at 90% 0%, hsl(312 100% 90% / 0.45), transparent 60%),\n          radial-gradient(900px 500px at 50% 100%, hsl(200 100% 86% / 0.35), transparent 60%);\n      }\n      \n      /* Container */\n      .recipe-container {\n        max-width: 1200px;\n        margin: 0 auto;\n        animation: fadeIn 0.8s ease-out;\n      }\n      \n      /* Hero Section */\n      .hero-section {\n        border-radius: 1rem;\n        overflow: hidden;\n        border: 1px solid rgba(255, 255, 255, 0.6);\n        background: rgba(255, 255, 255, 0.7);\n        backdrop-filter: blur(12px);\n        box-shadow: 0 10px 40px -10px rgba(31, 38, 135, 0.12);\n        margin-bottom: 2rem;\n      }\n      \n      .dark .hero-section {\n        border: 1px solid rgba(255, 255, 255, 0.1);\n        background: rgba(15, 23, 42, 0.6);\n      }\n      \n      .hero-grid {\n        position: relative;\n        display: grid;\n        grid-template-columns: 1fr;\n        gap: 0;\n        align-items: stretch;\n      }\n      \n      @media (min-width: 768px) {\n        .hero-grid {\n          grid-template-columns: 1fr 1fr;\n          gap: 2rem;\n        }\n      }\n      \n      .hero-content {\n        padding: 1.5rem;\n        order: 2;\n        display: flex;\n        flex-direction: column;\n        justify-content: center;\n      }\n      \n      @media (min-width: 640px) {\n        .hero-content {\n          padding: 2.5rem;\n        }\n      }\n      \n      @media (min-width: 768px) {\n        .hero-content {\n          order: 1;\n        }\n      }\n      \n      .hero-title {\n        font-family: ui-serif, Georgia, Cambria, \"Times New Roman\", Times, serif;\n        font-size: 1.875rem;\n        font-weight: 600;\n        line-height: 1.2;\n        color: #1e293b;\n        margin-bottom: 0.75rem;\n      }\n      \n      @media (min-width: 640px) {\n        .hero-title {\n          font-size: 2.25rem;\n        }\n      }\n      \n      @media (min-width: 768px) {\n        .hero-title {\n          font-size: 3rem;\n        }\n      }\n      \n      .dark .hero-title {\n        color: #f1f5f9;\n      }\n      \n      .hero-description {\n        margin-top: 0.75rem;\n        color: #475569;\n        line-height: 1.6;\n      }\n      \n      .dark .hero-description {\n        color: #cbd5e1;\n      }\n      \n      .hero-badges {\n        margin-top: 1.25rem;\n        display: flex;\n        flex-wrap: wrap;\n        align-items: center;\n        gap: 0.75rem;\n      }\n      \n      .hero-badge {\n        display: inline-flex;\n        align-items: center;\n        gap: 0.5rem;\n        border-radius: 9999px;\n        border: 1px solid rgba(226, 232, 240, 0.6);\n        background: rgba(255, 255, 255, 0.7);\n        padding: 0.375rem 0.75rem;\n        font-size: 0.75rem;\n        color: #475569;\n      }\n      \n      .dark .hero-badge {\n        border: 1px solid rgba(255, 255, 255, 0.1);\n        background: rgba(30, 41, 59, 0.6);\n        color: #cbd5e1;\n      }\n      \n      .hero-actions {\n        margin-top: 1.5rem;\n        display: flex;\n        flex-wrap: wrap;\n        gap: 0.75rem;\n      }\n      \n      .btn-secondary {\n        display: inline-flex;\n        align-items: center;\n        gap: 0.5rem;\n        border-radius: 0.5rem;\n        border: 1px solid rgba(226, 232, 240, 0.6);\n        background: rgba(255, 255, 255, 0.8);\n        padding: 0.5rem 0.75rem;\n        font-size: 0.875rem;\n        color: #374151;\n        text-decoration: none;\n        transition: all 0.3s ease;\n      }\n      \n      .btn-secondary:hover {\n        background: #f8fafc;\n      }\n      \n      .dark .btn-secondary {\n        border: 1px solid rgba(255, 255, 255, 0.1);\n        background: rgba(30, 41, 59, 0.7);\n        color: #e2e8f0;\n      }\n      \n      .dark .btn-secondary:hover {\n        background: rgba(30, 41, 59, 1);\n      }\n      \n      .btn-primary {\n        display: inline-flex;\n        align-items: center;\n        gap: 0.5rem;\n        border-radius: 0.5rem;\n        background: linear-gradient(135deg, #d946ef, #4f46e5);\n        color: white;\n        font-size: 0.875rem;\n        font-weight: 500;\n        padding: 0.5rem 0.75rem;\n        text-decoration: none;\n        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);\n        transition: all 0.3s ease;\n      }\n      \n      .btn-primary:hover {\n        box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);\n        transform: scale(0.99);\n      }\n      \n      .hero-image {\n        order: 1;\n        position: relative;\n      }\n      \n      @media (min-width: 768px) {\n        .hero-image {\n          order: 2;\n        }\n      }\n      \n      .hero-image-overlay {\n        position: absolute;\n        inset: 0;\n        background: linear-gradient(135deg, rgba(217, 70, 239, 0.5) 0%, transparent 50%, rgba(79, 70, 229, 0.5) 100%);\n      }\n      \n      .dark .hero-image-overlay {\n        background: linear-gradient(135deg, rgba(217, 70, 239, 0.1) 0%, transparent 50%, rgba(79, 70, 229, 0.1) 100%);\n      }\n      \n      .hero-image-container {\n        aspect-ratio: 4/3;\n      }\n      \n      @media (min-width: 768px) {\n        .hero-image-container {\n          aspect-ratio: auto;\n          height: 100%;\n        }\n      }\n      \n      .hero-image img {\n        height: 100%;\n        width: 100%;\n        object-fit: cover;\n      }\n      \n      /* Content grid */\n      .content-grid {\n        display: grid;\n        grid-template-columns: 1fr 2fr;\n        gap: 2rem;\n        margin-bottom: 2rem;\n      }\n      \n      @media (max-width: 1024px) {\n        .content-grid {\n          grid-template-columns: 1fr;\n        }\n      }\n      \n      /* Cards */\n      .card {\n        border-radius: 1rem;\n        border: 1px solid rgba(255, 255, 255, 0.6);\n        background: rgba(255, 255, 255, 0.7);\n        backdrop-filter: blur(12px);\n        padding: 1.5rem;\n        box-shadow: 0 10px 40px -10px rgba(31, 38, 135, 0.08);\n      }\n      \n      .dark .card {\n        border: 1px solid rgba(255, 255, 255, 0.1);\n        background: rgba(15, 23, 42, 0.6);\n      }\n      \n      .section-title {\n        font-family: ui-serif, Georgia, Cambria, \"Times New Roman\", Times, serif;\n        font-size: 1.5rem;\n        font-weight: 600;\n        color: #1e293b;\n        margin-bottom: 1rem;\n        display: flex;\n        align-items: center;\n        gap: 0.5rem;\n      }\n      \n      .dark .section-title {\n        color: #f1f5f9;\n      }\n      \n      .section-title::before {\n        content: '';\n        width: 4px;\n        height: 1.5rem;\n        background: linear-gradient(135deg, #667eea, #764ba2);\n        border-radius: 2px;\n      }\n      \n      /* Ingredients List */\n      .ingredients-list {\n        display: flex;\n        flex-direction: column;\n        gap: 0.75rem;\n      }\n      \n      .ingredient-item {\n        display: flex;\n        align-items: flex-start;\n        gap: 0.75rem;\n        padding: 0.75rem;\n        border-radius: 0.5rem;\n        transition: all 0.3s ease;\n        position: relative;\n      }\n      \n      .ingredient-item:hover {\n        background: rgba(248, 250, 252, 0.5);\n      }\n      \n      .dark .ingredient-item:hover {\n        background: rgba(30, 41, 59, 0.3);\n      }\n      \n      .ingredient-checkbox {\n        margin-top: 0.125rem;\n        width: 1rem;\n        height: 1rem;\n        border-radius: 0.25rem;\n        border: 2px solid #d1d5db;\n        background: white;\n        cursor: pointer;\n        transition: all 0.2s ease;\n        flex-shrink: 0;\n        appearance: none;\n        position: relative;\n      }\n      \n      .ingredient-checkbox:checked {\n        background: linear-gradient(135deg, #667eea, #764ba2);\n        border-color: #667eea;\n      }\n      \n      .ingredient-checkbox:checked::after {\n        content: '✓';\n        position: absolute;\n        top: 50%;\n        left: 50%;\n        transform: translate(-50%, -50%);\n        color: white;\n        font-size: 0.75rem;\n        font-weight: bold;\n      }\n      \n      .ingredient-content {\n        flex: 1;\n        display: flex;\n        justify-content: space-between;\n        align-items: center;\n        gap: 1rem;\n      }\n      \n      .ingredient-text {\n        flex: 1;\n        transition: all 0.3s ease;\n      }\n      \n      .ingredient-item.checked .ingredient-text {\n        opacity: 0.6;\n        text-decoration: line-through;\n      }\n      \n      .amazon-btn {\n        background: #ff9900;\n        color: white;\n        border: none;\n        padding: 0.4rem 0.6rem;\n        border-radius: 0.375rem;\n        text-decoration: none;\n        font-size: 0.75rem;\n        font-weight: 600;\n        transition: all 0.3s ease;\n        display: flex;\n        align-items: center;\n        gap: 0.25rem;\n        flex-shrink: 0;\n      }\n      \n      .amazon-btn:hover {\n        background: #e68900;\n        transform: scale(1.05);\n      }\n      \n      .amazon-logo {\n        width: 14px;\n        height: 14px;\n        background: white;\n        border-radius: 2px;\n        display: flex;\n        align-items: center;\n        justify-content: center;\n        font-size: 10px;\n        color: #ff9900;\n        font-weight: bold;\n      }\n      \n      /* Directions */\n      .directions-list {\n        counter-reset: step-counter;\n        display: grid;\n        gap: 1rem;\n      }\n      \n      .direction-step {\n        background: rgba(255, 255, 255, 0.8);\n        padding: 1.5rem;\n        border-radius: 0.75rem;\n        border: 1px solid rgba(226, 232, 240, 0.7);\n        position: relative;\n        counter-increment: step-counter;\n        transition: all 0.3s ease;\n        display: flex;\n        gap: 1rem;\n        align-items: flex-start;\n      }\n      \n      .dark .direction-step {\n        background: rgba(30, 41, 59, 0.7);\n        border: 1px solid rgba(255, 255, 255, 0.1);\n        color: #f1f5f9;\n      }\n      \n      .direction-step::before {\n        content: counter(step-counter);\n        flex-shrink: 0;\n        margin-top: 0.125rem;\n        height: 1.5rem;\n        width: 1.5rem;\n        border-radius: 50%;\n        background: linear-gradient(135deg, #667eea, #764ba2);\n        color: white;\n        display: flex;\n        align-items: center;\n        justify-content: center;\n        font-weight: bold;\n        font-size: 0.75rem;\n      }\n      \n      .direction-step:hover {\n        transform: translateY(-2px);\n        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);\n      }\n      \n      /* Mobile optimizations */\n      @media (max-width: 768px) {\n        body {\n          padding: 0.5rem;\n        }\n        \n        .card {\n          padding: 1rem;\n        }\n        \n        .section-title {\n          font-size: 1.25rem;\n        }\n        \n        .ingredient-content {\n          flex-direction: column;\n          align-items: flex-start;\n          gap: 0.5rem;\n        }\n        \n        .amazon-btn {\n          align-self: flex-end;\n        }\n      }\n      \n      @media (max-width: 480px) {\n        .ingredient-item {\n          padding: 0.5rem;\n        }\n        \n        .amazon-btn {\n          padding: 0.3rem 0.5rem;\n          font-size: 0.7rem;\n        }\n      }\n    </style>\n</head>\n\n<body>\n    <!-- Background flare -->\n    <div class=\"bg-flare\" aria-hidden=\"true\"></div>\n\n    <div class=\"recipe-container\">\n        <!-- Hero Section -->\n        <section class=\"hero-section\">\n            <div class=\"hero-grid\">\n                <div class=\"hero-content\">\n                    <h1 class=\"hero-title\">{{ $json.recipe_name || 'Creative Fusion Recipe' }}</h1>\n                    <p class=\"hero-description\">{{ $json.brief_description || 'A delicious fusion recipe combining unique flavors and techniques.' }}</p>\n\n                    <div class=\"hero-badges\">\n                        <span class=\"hero-badge\">\n                            <svg class=\"h-4 w-4\" style=\"color: #d946ef;\" viewBox=\"0 0 24 24\" fill=\"currentColor\">\n                                <path d=\"M12 21s-6-4.35-9-8.7C1.5 9.9 3 6 6.75 6 9 6 10.5 7.5 12 9c1.5-1.5 3-3 5.25-3C21 6 22.5 9.9 21 12.3 18 16.65 12 21 12 21z\"/>\n                            </svg>\n                            Fusion Recipe\n                        </span>\n                        <span class=\"hero-badge\">\n                            <svg class=\"h-4 w-4\" style=\"color: #4f46e5;\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.6\">\n                                <path d=\"M12 6v6l4 2\"/>\n                                <circle cx=\"12\" cy=\"12\" r=\"9\"/>\n                            </svg>\n                            {{ $json.prep_time || 'Prep time varies' }}\n                        </span>\n                    </div>\n\n                    <div class=\"hero-actions\">\n                        <button class=\"btn-secondary focus-ring\" onclick=\"window.print()\">\n                            <svg class=\"h-4 w-4\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.7\">\n                                <path d=\"M6 9V2h12v7\"/>\n                                <path d=\"M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2\"/>\n                                <path d=\"M6 14h12v8H6z\"/>\n                            </svg>\n                            Print\n                        </button>\n                    </div>\n                </div>\n\n                <!-- Visual card -->\n                <div class=\"hero-image\">\n                    <div class=\"hero-image-overlay\"></div>\n                    <div class=\"hero-image-container\">\n                        <img alt=\"{{ $json.recipe_name || 'Recipe' }} - delicious fusion cuisine\" src=\"{{ $json.recipe_image_url || 'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?q=80&w=1200&auto=format&fit=crop' }}\" class=\"h-full w-full object-cover\"/>\n                    </div>\n                </div>\n            </div>\n        </section>\n\n        <div class=\"content-grid\">\n            <!-- Ingredients -->\n            <article class=\"card\">\n                <h2 class=\"section-title\">🥄 Ingredients</h2>\n                <div class=\"ingredients-list\">\n                    {{ $json.recipe_ingredients.map((ingredient, index) => `\n                        <div class=\"ingredient-item\">\n                            <input type=\"checkbox\" class=\"ingredient-checkbox\" onchange=\"toggleIngredient(this)\">\n                            <div class=\"ingredient-content\">\n                                <span class=\"ingredient-text\">${ingredient}</span>\n                                <a href=\"${$json.amazon_recipe_links[index] || '#'}\" class=\"amazon-btn\" target=\"_blank\" rel=\"noopener\">\n                                    <div class=\"amazon-logo\">A</div>\n                                    Shop\n                                </a>\n                            </div>\n                        </div>\n                    `).join('') }}\n                </div>\n            </article>\n\n            <!-- Method -->\n            <article class=\"card\">\n                <h2 class=\"section-title\">👨‍🍳 Directions</h2>\n                <div class=\"directions-list\">\n                    {{ $json.recipe_directions.map(direction => `<div class=\"direction-step\">${direction}</div>`).join('') }}\n                </div>\n            </article>\n        </div>\n    </div>\n\n    <script>\n        // Dark mode toggle functionality (optional)\n        document.addEventListener('keydown', function(e) {\n            if (e.key === 'd' && e.ctrlKey) {\n                e.preventDefault();\n                const root = document.documentElement;\n                const dark = root.classList.toggle(\"dark\");\n                localStorage.theme = dark ? \"dark\" : \"light\";\n            }\n        });\n\n        // Ingredient checkbox functionality\n        function toggleIngredient(checkbox) {\n            const ingredientItem = checkbox.closest('.ingredient-item');\n            if (checkbox.checked) {\n                ingredientItem.classList.add('checked');\n            } else {\n                ingredientItem.classList.remove('checked');\n            }\n        }\n    </script>\n</body>\n</html>"
+      },
+      "type": "n8n-nodes-base.html",
+      "typeVersion": 1.2,
+      "position": [
+        336,
+        336
+      ],
+      "id": "ed9bb5c3-9c48-48b1-80c8-a54a409666c3",
+      "name": "HTML"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Step 1: Safely access and process the input content\nlet html = '';\ntry {\n  let rawOutput = '';\n  if ($input.first().json && $input.first().json.output) {\n    rawOutput = $input.first().json.output;\n  } else if ($input.first().json && typeof $input.first().json === 'string') {\n    rawOutput = $input.first().json;\n  } else if ($input.first().json) {\n    if ($input.first().json.message && $input.first().json.message.content) {\n      rawOutput = $input.first().json.message.content;\n    } else if ($input.first().json.data && typeof $input.first().json.data === 'string') {\n      rawOutput = $input.first().json.data;\n    }\n  }\n\n  html = rawOutput || '';\n  html = html.replace(/^```html\\n?/, '').replace(/```$/, '');\n  html = html.replace(/\\\\n/g, '\\n');\n  html = html.trim();\n} catch (error) {\n  console.warn('Error accessing or processing input content. Error:', error.message);\n  return [{\n    json: {\n      recipe_name: null,\n      recipe_ingredients: [],\n      recipe_directions: [],\n      amazon_recipe_links: [],\n      prep_time: null,\n      brief_description: null,\n    },\n  }];\n}\n\nif (!html) {\n  console.warn('Content was empty or inaccessible after initial processing.');\n  return [{\n    json: {\n      recipe_name: null,\n      recipe_ingredients: [],\n      recipe_directions: [],\n      amazon_recipe_links: [],\n      prep_time: null,\n      brief_description: null,\n    },\n  }];\n}\n\n// Initialize output structure\nlet recipeData = {\n  recipe_name: null,\n  recipe_ingredients: [],\n  recipe_directions: [],\n  amazon_recipe_links: [],\n  prep_time: null,\n  brief_description: null,\n};\n\nconst lines = html.split('\\n');\nlet currentSection = null;\nlet tempIngredients = [];\nlet tempDirections = [];\nlet tempLinks = [];\nlet tempDescription = [];\n\n// Helper functions\nconst isHeadingMatch = (line, keywords) => {\n  const lower = line.toLowerCase().trim();\n  return keywords.some(keyword => \n    lower.includes(keyword.toLowerCase()) && \n    (lower.startsWith('#') || lower.endsWith(':'))\n  );\n};\n\nconst extractUrl = (text) => {\n  const match = text.match(/(https?:\\/\\/[^\\s]+)/);\n  return match ? match[1] : null;\n};\n\n// Parse line by line\nfor (let i = 0; i < lines.length; i++) {\n  const line = lines[i];\n  const trimmed = line.trim();\n  \n  if (!trimmed) continue;\n\n  // Extract recipe name from the FIRST heading (# or ##) that appears\n  if (!recipeData.recipe_name && trimmed.match(/^#+\\s+/)) {\n    // Remove all # symbols and trim whitespace\n    const potentialName = trimmed.replace(/^#+\\s*/, '').trim();\n    \n    // Skip common section headers that aren't recipe names\n    const skipKeywords = [\n      'ingredients', 'preparation', 'instructions', 'amazon', 'links', \n      'estimated', 'prep time', 'preparation time', 'garnish'\n    ];\n    \n    const isSkippable = skipKeywords.some(keyword => \n      potentialName.toLowerCase().includes(keyword)\n    );\n    \n    if (!isSkippable && potentialName.length > 0) {\n      recipeData.recipe_name = potentialName;\n      continue;\n    }\n  }\n\n  // Section detection\n  if (isHeadingMatch(trimmed, ['Ingredients'])) {\n    currentSection = 'ingredients';\n    continue;\n  }\n  \n  if (isHeadingMatch(trimmed, ['Preparation Instructions', 'Instructions', 'Recipe Instructions'])) {\n    currentSection = 'instructions';\n    continue;\n  }\n  \n  if (isHeadingMatch(trimmed, ['Amazon Ingredient Links', 'Amazon Links'])) {\n    currentSection = 'amazon_links';\n    continue;\n  }\n  \n  if (isHeadingMatch(trimmed, ['Estimated Preparation Time', 'Prep Time', 'Preparation Time'])) {\n    currentSection = 'prep_time';\n    continue;\n  }\n\n  // Content parsing based on current section\n  if (currentSection === 'ingredients') {\n    // Skip subheadings within ingredients\n    if (trimmed.startsWith('#') || trimmed.endsWith(':')) {\n      continue;\n    }\n    // Collect ingredient lines\n    if (trimmed.startsWith('- ')) {\n      const ingredient = trimmed.replace(/^-\\s+/, '').trim();\n      // Remove parenthetical notes for cleaner ingredients\n      const cleanIngredient = ingredient.replace(/\\s+\\([^)]*\\)$/, '').trim();\n      if (cleanIngredient) {\n        tempIngredients.push(cleanIngredient);\n      }\n    }\n    continue;\n  }\n\n  if (currentSection === 'instructions') {\n    // Skip subheadings and section breaks\n    if (trimmed.startsWith('#') || trimmed.startsWith('**') || trimmed === '---') {\n      continue;\n    }\n    // Collect numbered steps\n    if (/^\\d+\\./.test(trimmed)) {\n      const step = trimmed.replace(/^\\d+\\.\\s*/, '').trim();\n      if (step) {\n        tempDirections.push(step);\n      }\n    }\n    continue;\n  }\n\n  if (currentSection === 'prep_time') {\n    // Look for time information - more flexible matching\n    if (trimmed.toLowerCase().includes('total') || trimmed.toLowerCase().includes('approximately')) {\n      const timeMatch = trimmed.match(/(\\d+)\\s*minutes?/i);\n      if (timeMatch) {\n        recipeData.prep_time = timeMatch[1] + ' minutes';\n      }\n    }\n    continue;\n  }\n\n  if (currentSection === 'amazon_links') {\n    if (trimmed.startsWith('- ')) {\n      const url = extractUrl(trimmed);\n      if (url) {\n        tempLinks.push(url);\n      }\n    }\n    continue;\n  }\n\n  // Collect description before any major sections\n  if (!currentSection && !trimmed.startsWith('#') && !trimmed.startsWith('---')) {\n    tempDescription.push(trimmed);\n  }\n}\n\n// Assign parsed data\nrecipeData.recipe_ingredients = tempIngredients;\nrecipeData.recipe_directions = tempDirections;\nrecipeData.amazon_recipe_links = tempLinks;\n\nif (tempDescription.length > 0) {\n  recipeData.brief_description = tempDescription.join(' ').trim();\n}\n\n// Fallback recipe name generation if none was found\nif (!recipeData.recipe_name && tempIngredients.length > 0) {\n  const firstFewIngredients = tempIngredients.slice(0, 2).map(ing => \n    ing.split(',')[0].split(' ').slice(-1)[0]\n  ).join(' & ');\n  recipeData.recipe_name = `Creative Recipe: ${firstFewIngredients} Fusion`;\n}\n\nconsole.log('Parsed recipe data:', recipeData);\n\nreturn [{ json: recipeData }];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        80,
+        336
+      ],
+      "id": "2dd5fa62-3dd6-46d0-98a6-ea6896c75e26",
+      "name": "Format Code"
+    }
+  ],
+  "origin": "n8n",
+  "pinData": {},
+  "repo": {
+    "owner": "bpms-hub",
+    "name": "n8n-vc_repo"
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": null,
+  "tags": [],
+  "triggerCount": 0,
+  "updatedAt": "2025-08-04T16:54:25.000Z",
+  "versionId": "178106cc-d672-43dd-9953-17b0b0f018c6"
+}
