@@ -1,6 +1,6 @@
 {
   "createdAt": "2025-08-15T00:13:02.472Z",
-  "updatedAt": "2025-08-15T01:01:07.000Z",
+  "updatedAt": "2025-08-15T01:02:57.000Z",
   "id": "HtssylUPoQv8KtfH",
   "name": "Bidirectional GitHub Workflow Sync & Version Control for n8n Workflows 2",
   "active": true,
@@ -102,7 +102,6 @@
       "parameters": {
         "authentication": "oAuth2",
         "resource": "file",
-        "operation": "edit",
         "owner": {
           "__rl": true,
           "mode": "name",
@@ -839,7 +838,7 @@
     "templateCredsSetupCompleted": true
   },
   "pinData": {},
-  "versionId": "9fe1dfa5-aa77-4c59-8b83-829f79711ef8",
+  "versionId": "147adcf3-4554-4da2-92d7-e39d2ae88dcc",
   "triggerCount": 1,
   "tags": []
 }
