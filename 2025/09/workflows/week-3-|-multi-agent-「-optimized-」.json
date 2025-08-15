@@ -1,0 +1,949 @@
+{
+  "createdAt": "2025-08-15T16:56:04.801Z",
+  "updatedAt": "2025-08-15T16:58:46.000Z",
+  "id": "2HLqA3gNupw5m7bX",
+  "name": "Week 3 | Multi-Agent 「 OPTIMIZED 」",
+  "active": false,
+  "isArchived": false,
+  "nodes": [
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.chatTrigger",
+      "typeVersion": 1.1,
+      "position": [
+        -1360,
+        -320
+      ],
+      "id": "46db0730-62c5-4505-b3cf-4d1343617ef6",
+      "name": "When chat message received",
+      "webhookId": "249a5a5e-93e9-462e-a374-2189215fa0eb"
+    },
+    {
+      "parameters": {
+        "model": "google/gemini-2.5-flash",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenRouter",
+      "typeVersion": 1,
+      "position": [
+        -1152,
+        -208
+      ],
+      "id": "d1e37545-9d69-4f51-abc3-e3dde338399d",
+      "name": "OpenRouter Chat Model",
+      "credentials": {
+        "openRouterApi": {
+          "id": "jQR7uGa0YGZ17Ov7",
+          "name": "OpenRouter account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "description": "Call this tool to take any calendar actions",
+        "workflowId": {
+          "__rl": true,
+          "value": "RI3z0y5kCt6l5rh5",
+          "mode": "list",
+          "cachedResultName": "_Calendar Agent"
+        },
+        "workflowInputs": {
+          "mappingMode": "defineBelow",
+          "value": {},
+          "matchingColumns": [],
+          "schema": [],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.toolWorkflow",
+      "typeVersion": 2.2,
+      "position": [
+        -736,
+        288
+      ],
+      "id": "db199b86-1e2b-4593-8434-0b1fc2aa3bb3",
+      "name": "_Calendar Agent"
+    },
+    {
+      "parameters": {
+        "description": "Call this tool when someone requests a recipe or something that deals with food.",
+        "workflowId": {
+          "__rl": true,
+          "value": "3oxRY9V9gpbB0Lww",
+          "mode": "list",
+          "cachedResultName": "LO Week 2 / \"YES, AGENT CHEF!\""
+        },
+        "workflowInputs": {
+          "mappingMode": "defineBelow",
+          "value": {},
+          "matchingColumns": [],
+          "schema": [],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.toolWorkflow",
+      "typeVersion": 2.2,
+      "position": [
+        -1776,
+        528
+      ],
+      "id": "f9664194-26f7-4af8-a0d5-27764f43064a",
+      "name": "Recipe Maker"
+    },
+    {
+      "parameters": {},
+      "type": "@n8n/n8n-nodes-langchain.memoryBufferWindow",
+      "typeVersion": 1.3,
+      "position": [
+        -1024,
+        -64
+      ],
+      "id": "07690080-25e9-4c9f-8723-c8b8ba9e83d2",
+      "name": "Simple Memory"
+    },
+    {
+      "parameters": {
+        "options": {
+          "systemMessage": "You are an orchestrator agent. Your only job is to delegate the task to the correct sub-agent tool. \n\nYou don't have the ability to ask clarifying questions, or compose anything on behalf of other tools.\nPass any Output Parsing to other agents that require it.\n\nAfter Retrieval Agent provides data, take that data, pass that data to the Analysis Agent Tool, it will output to the Manager Agent (you) the additional key: \"recipeRec\" onto the Creation Agent Tool"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 2.1,
+      "position": [
+        -1152,
+        -320
+      ],
+      "id": "ed0e4c3d-c47a-4f35-acd1-1b7b932bebb7",
+      "name": "Manager Agent"
+    },
+    {
+      "parameters": {
+        "toolDescription": "You are an agent that must always use the Google sheets tool to fetch Google Sheets data when asked. Call the tool with the information provided, even if incomplete.\n\nYou must always return a JSON object with keys: total_sales, total_units, breakdown. If any value is missing, set it to null or an empty array.\n",
+        "text": "={{ $fromAI('Prompt__User_Message_', ``, 'string') }}\nCall The _Sheets Agent and return an array of objects, one per date.\n\nOnly return valid JSON, no extra text.\nAfter the output is provided from the sheet, use the ",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.agentTool",
+      "typeVersion": 2.2,
+      "position": [
+        -2192,
+        64
+      ],
+      "id": "27b87ed8-6cfd-4c4a-ad4f-41a939bef485",
+      "name": "Retrieval Agent"
+    },
+    {
+      "parameters": {
+        "toolDescription": "AI Agent that cross-checks promotion copy against brand\nguidelines and ensures any allergen info is included.",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.agentTool",
+      "typeVersion": 2.2,
+      "position": [
+        -160,
+        64
+      ],
+      "id": "1d44babe-0415-493c-827a-56518958dae9",
+      "name": "Verification Agent Tool",
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "n8n-nodes-base.facebookGraphApiTool",
+      "typeVersion": 1,
+      "position": [
+        -2336,
+        160
+      ],
+      "id": "2256ec0e-67fb-4f4b-9057-b0ef0fa41469",
+      "name": "Facebook Graph API",
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequestTool",
+      "typeVersion": 4.2,
+      "position": [
+        -2192,
+        288
+      ],
+      "id": "364c715a-5a34-4a24-a592-5f8a1bb48400",
+      "name": "OpenTable/Resy HTTP Request ",
+      "disabled": true
+    },
+    {
+      "parameters": {},
+      "type": "@n8n/n8n-nodes-langchain.toolCalculator",
+      "typeVersion": 1,
+      "position": [
+        -1024,
+        -432
+      ],
+      "id": "5612d1f2-dab5-4d04-8a7c-93d55b6a0373",
+      "name": "Calculator"
+    },
+    {
+      "parameters": {
+        "model": "openai/gpt-5-mini",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenRouter",
+      "typeVersion": 1,
+      "position": [
+        -1616,
+        144
+      ],
+      "id": "c5c5da6a-03ea-44e4-9046-d5ae5121cf9e",
+      "name": "OpenRouter Chat Model2",
+      "credentials": {
+        "openRouterApi": {
+          "id": "jQR7uGa0YGZ17Ov7",
+          "name": "OpenRouter account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequestTool",
+      "typeVersion": 4.2,
+      "position": [
+        -1872,
+        288
+      ],
+      "id": "62cbf325-1e86-4e92-9d23-b19e15c195d6",
+      "name": "POS system API",
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "11GuM4l5CekaZy9_RNmsEdxZ3mru88QIR4J06Ihjr8x8",
+          "mode": "list",
+          "cachedResultName": "Analytics dashboard",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/11GuM4l5CekaZy9_RNmsEdxZ3mru88QIR4J06Ihjr8x8/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 1882856635,
+          "mode": "list",
+          "cachedResultName": "NightlySummary",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/11GuM4l5CekaZy9_RNmsEdxZ3mru88QIR4J06Ihjr8x8/edit#gid=1882856635"
+        },
+        "options": {
+          "dataLocationOnSheet": {
+            "values": {
+              "rangeDefinition": "detectAutomatically",
+              "readRowsUntil": "firstEmptyRow"
+            }
+          }
+        }
+      },
+      "type": "n8n-nodes-base.googleSheetsTool",
+      "typeVersion": 4.6,
+      "position": [
+        -2032,
+        288
+      ],
+      "id": "83a83f8a-1fc2-4b9e-8381-19b98ad444b6",
+      "name": "Get row(s) in sheet in Google Sheets",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "kOeJv9ACT74Bk3jB",
+          "name": "Google Sheets account"
+        }
+      },
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "sendTo": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('To', ``, 'string') }}",
+        "subject": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Subject', ``, 'string') }}",
+        "emailType": "text",
+        "message": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Message', `Always sign off emails as \" -Nik Demo\"`, 'string') }}",
+        "options": {
+          "appendAttribution": false
+        }
+      },
+      "type": "n8n-nodes-base.gmailTool",
+      "typeVersion": 2.1,
+      "position": [
+        -576,
+        288
+      ],
+      "id": "7b23a893-872b-4663-8c06-19cd34d893e2",
+      "name": "Send a message in Gmail",
+      "webhookId": "8e28e57e-f3c1-4de5-9bba-62bef57022ae",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "bQvnHcTvkeJSh8m2",
+          "name": "Gmail account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "// n8n Code node: Clean up stats text and output as JSON\n\n// Try to find the stats string in the input\nlet input = null;\nconst json = $input.item.json;\n\n// Try 'text', 'output', or any string property\nif (typeof json.text === 'string') {\n  input = json.text;\n} else if (typeof json.output === 'string') {\n  input = json.output;\n} else {\n  // Try to find any string property\n  for (const key of Object.keys(json)) {\n    if (typeof json[key] === 'string' && json[key].includes('Stats for')) {\n      input = json[key];\n      break;\n    }\n  }\n}\n\nif (!input) {\n  throw new Error('Input data must have a stats string property under item.json');\n}\n\n// Regex patterns for each field\nconst patterns = {\n  date: /Stats for ([\\d/]+) \\(interpreting [^)]+\\)/,\n  sales_usd: /Sales \\(USD\\): \\$([\\d,]+\\.\\d{2})/,\n  reservations: /Reservations: (\\d+)/,\n  low_stock_items: /Low-stock items: ([^\\n]+)/,\n  featured_drink: /Featured drink: ([^\\n]+)/,\n  instagram_likes: /Instagram likes: (\\d+)/,\n  promo_posted: /Promo posted: (Yes|No)/,\n  notes: /Notes: ([^\\n]+)/,\n  email_status: /Email status:[\\s\\S]*?has been sent containing these values in the body\\./\n};\n\n// Helper to extract and clean\nfunction extract(pattern, text, transform = v => v) {\n  const match = text.match(pattern);\n  return match ? transform(match[1].trim()) : null;\n}\n\n// Parse low-stock items as array\nfunction parseList(str) {\n  return str.split(',').map(s => s.trim());\n}\n\n// Build the output object\nconst result = {\n  date: extract(patterns.date, input),\n  sales_usd: extract(patterns.sales_usd, input, v => parseFloat(v.replace(/,/g, ''))),\n  reservations: extract(patterns.reservations, input, v => parseInt(v, 10)),\n  low_stock_items: extract(patterns.low_stock_items, input, parseList),\n  featured_drink: extract(patterns.featured_drink, input),\n  instagram_likes: extract(patterns.instagram_likes, input, v => parseInt(v, 10)),\n  promo_posted: extract(patterns.promo_posted, input, v => v === 'Yes'),\n  notes: extract(patterns.notes, input),\n  email_sent: input.includes('has been sent containing these values in the body.')\n};\n\nreturn [{ json: result }];\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -624,
+        -544
+      ],
+      "id": "8725eaaa-f513-4ba7-adf3-8eeeb683c2cb",
+      "name": "Code"
+    },
+    {
+      "parameters": {
+        "model": "openai/gpt-5-mini",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenRouter",
+      "typeVersion": 1,
+      "position": [
+        -688,
+        144
+      ],
+      "id": "6edf5d84-8df3-4f5e-ae52-3d6afef20349",
+      "name": "OpenRouter Chat Model3",
+      "credentials": {
+        "openRouterApi": {
+          "id": "jQR7uGa0YGZ17Ov7",
+          "name": "OpenRouter account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "schemaType": "manual",
+        "inputSchema": "{\n  \"nodes\": [\n    {\n      \"parameters\": {\n        \"jsonSchemaExample\": \"{\\n  \\\"date\\\": \\\"2025-08-11\\\",\\n  \\\"sales_usd\\\": 7842.50,\\n  \\\"reservations\\\": 128,\\n  \\\"low_stock_items\\\": [\\n    \\\"Espresso Syrup\\\",\\n    \\\"Gin\\\"\\n  ],\\n  \\\"featured_drink\\\": \\\"Lavender Gimlet\\\",\\n  \\\"instagram_likes\\\": 532,\\n  \\\"promo_posted\\\": true,\\n  \\\"notes\\\": \\\"IG rate-limit retry; syrup reorder triggered; Free-text diagnostics; Verification/Manager\\\",\\n  \\\"email\\\": {\\n    \\\"to\\\": \\\"beepiams@gmail.com\\\",\\n    \\\"subject\\\": \\\"stats\\\",\\n    \\\"body\\\": \\\"Daily Stats for 2025-08-11\\\\n\\\\nSales (USD): $7,842.50\\\\nReservations: 128\\\\n\\\\nLow Stock Items:\\\\n- Espresso Syrup\\\\n- Gin\\\\n\\\\nFeatured Drink: Lavender Gimlet\\\\nInstagram Likes: 532\\\\nPromo Posted: Yes\\\\n\\\\nNotes:\\\\nIG rate-limit retry; syrup reorder triggered; Free-text diagnostics; Verification/Manager\\\\n\\\\n—\\\\nBNIK@DEMO BAR\\\",\\n    \\\"send_status\\\": \\\"sent\\\",\\n    \\\"message_id\\\": \\\"1989fd166e48cc77\\\"\\n  }\\n}\"\n      },\n      \"type\": \"@n8n/n8n-nodes-langchain.outputParserStructured\",\n      \"typeVersion\": 1.3,\n      \"position\": [\n        -1408,\n        -64\n      ],\n      \"id\": \"fb5b0e56-8ca0-4fe1-b142-319708ffdac3\",\n      \"name\": \"Structured Output Parser1\",\n      \"disabled\": true\n    }\n  ],\n  \"connections\": {\n    \"Structured Output Parser1\": {\n      \"ai_outputParser\": [\n        []\n      ]\n    }\n  },\n  \"pinData\": {},\n  \"meta\": {\n    \"templateCredsSetupCompleted\": true,\n    \"instanceId\": \"e92865aa0dc130a8dc5c12e0f970962993db07b93e75ea217fa6173711db37f1\"\n  }\n}"
+      },
+      "type": "@n8n/n8n-nodes-langchain.outputParserStructured",
+      "typeVersion": 1.3,
+      "position": [
+        -384,
+        64
+      ],
+      "id": "0db0010e-73a3-4bae-a4f5-4faafeddfc6c",
+      "name": "Structured Output Parser"
+    },
+    {
+      "parameters": {
+        "description": "Parse code for readability and cleanliness. ",
+        "jsCode": "// n8n Code node: Parse stats from array or stringified array\n\nlet stats;\nconst input = $input.item.json;\n\n// If input is a string, parse it\nif (typeof input === 'string') {\n  stats = JSON.parse(input);\n} else if (typeof input.query === 'string') {\n  stats = JSON.parse(input.query);\n} else if (Array.isArray(input)) {\n  stats = input;\n} else {\n  throw new Error('Input data must be a JSON array or a stringified JSON array, or have a \"query\" property.');\n}\n\n// Get the first item\nconst item = Array.isArray(stats) ? stats[0] : stats;\n\n// Build a clean stats object\nconst breakdown = item.breakdown || {};\nconst result = {\n  date: breakdown.date || null,\n  sales_usd: item.total_sales || null,\n  reservations: item.total_units || null,\n  top_selling_drink: breakdown.top_selling_drink || null,\n  low_stock_items: breakdown.low_stock_items || [],\n  instagram_likes: breakdown.instagram_likes || null,\n  promo_posted: typeof breakdown.promo_posted === 'boolean' ? breakdown.promo_posted : null,\n  notes: breakdown.notes || null\n};\n\n// Optionally, add a formatted email body\nresult.body =\n  `Stats for ${result.date}:\\n` +\n  `- Sales (USD): ${result.sales_usd?.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}\\n` +\n  `- Reservations: ${result.reservations}\\n` +\n  `- Top Selling Drink: ${result.top_selling_drink}\\n` +\n  `- Low Stock Items: ${result.low_stock_items.length ? result.low_stock_items.join(', ') : 'None'}\\n` +\n  `- Instagram Likes: ${result.instagram_likes}\\n` +\n  `- Promo Posted: ${result.promo_posted ? 'Yes' : 'No'}\\n` +\n  `- Notes: ${result.notes}`;\n\nreturn [{ json: result }];\n"
+      },
+      "type": "@n8n/n8n-nodes-langchain.toolCode",
+      "typeVersion": 1.3,
+      "position": [
+        -432,
+        -528
+      ],
+      "id": "2ebd5140-0903-4f22-bb07-8e2809c1b0ba",
+      "name": "Code Tool"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.toolSerpApi",
+      "typeVersion": 1,
+      "position": [
+        -1632,
+        288
+      ],
+      "id": "84d160bf-cccb-4861-a800-25ca45d2bcc7",
+      "name": "Amazon/Whole Foods",
+      "credentials": {
+        "serpApi": {
+          "id": "HhlmY5MPBHrPTABF",
+          "name": "SerpAPI account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "=https://api.openai.com/v1/images/generations",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "openAiApi",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {}
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"model\": \"dall-e-3\",\n  \"prompt\": \"={{ 'Professional plated food of' + $json.recipe_name + ', beautifully plated, vibrant colors, restaurant quality, soft natural lighting, shallow depth of field, appetizing presentation' }}\",\n  \"n\": 1,\n  \"size\": \"1024x1024\",\n  \"quality\": \"standard\",\n  \"style\": \"natural\"\n}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -608,
+        720
+      ],
+      "id": "9ce2a5bd-6f1f-4760-998a-304ff2d61580",
+      "name": "DALL-E Image Request From Recipe",
+      "credentials": {
+        "openRouterApi": {
+          "id": "jQR7uGa0YGZ17Ov7",
+          "name": "OpenRouter account"
+        },
+        "openAiApi": {
+          "id": "Bq34GszUC9fnxb3H",
+          "name": "OpenAi account"
+        }
+      },
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "endpointUrl": "https://d62f580c-8a64-4c40-9663-582ea4a699ba-00-18vsjahncosza.worf.replit.dev/sse"
+      },
+      "type": "@n8n/n8n-nodes-langchain.mcpClientTool",
+      "typeVersion": 1.1,
+      "position": [
+        -1504,
+        288
+      ],
+      "id": "6788c50c-4fb9-4e25-afc4-eaa93d221164",
+      "name": "MCP Masterclass Cookbooks",
+      "alwaysOutputData": true
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=ROLE: You are a creative culinary fusion expert and recipe developer with access to comprehensive cooking databases through MCP Data Vector.\n\nTASK: Your main job is to create detailed, structured recipes that combine ingredients from different cultural cuisines, providing complete cooking guidance with shopping resources.\n\nINPUT: Users will give you requests for fusion recipes, cultural cuisine combinations, or specific cooking challenges that require research and creative recipe development.\n\nOUTPUT: You should respond with a structured recipe format containing:\n\n\n1. Recipe Title (with Recipe Title Creativity guidelines below)\n2. Brief cultural context explanation\n3. \n\nIngredients:\n\n\t- Each item starts with “- ” and includes precise quantities\n4. \n\nPreparation Instructions:\n\n\t1. Numbered steps, each a complete, actionable direction with specific techniques, times, temperatures, and visual cues\n5. \n\nEstimated Preparation Time:\n\n\n6. \n\nAmazon Ingredient Links:\n\n\t- Each link formatted “- [Ingredient Name]: [URL]”\n7. Generative image link:\n\nRecipe Title Creativity (Level Up!)\n\n\n\n• Use portmanteau at the syllable or letter level\n– Drop or replace vowels with apostrophes to hint at both roots\n• Stylized punctuation or casing\n– Apostrophes: Ch’AnGo Hot Pot\n– CamelCase: SzechUalli Duck Tacos\n– Hyphens or slashes: Indo-Bras–Bake\n• Sensory or emotive adjectives under 6 words\n– Velvet, Ember, Silk, Zing, Sun-kissed, Midnight\n• Alliteration, rhyme, rhythm, or pun\n– “Nori Noir Noodles,” “Pho-nomenal Fusion,” “Curry Up Carioca”\n• Keep it under 6 words; never start with an article (“The,” “A,” “For the”)\n• Spark curiosity—titles should read like exotic invitations\n\nIMAGE GENERATION GUIDELINES:\n\n\nWhen you prompt DALL·E (or any image model) for your Recipe Hero Image, enforce all of the following constraints in your internal prompt:\n• Show only the plated or bowled food itself.\n• No human elements: hands, arms, faces, torsos, legs.\n• No photography equipment or shadows.\n• Background neutral: plain white, light gray, or softly colored.\n• Studio-style even lighting; no visible stands or reflectors.\n• No Text within the pictures.\n\nCONSTRAINTS:\n\n- Never leave the recipe name empty, null, or overly simple\n- Never skip complete ingredient lists, prep steps, timing estimates, and shopping links\n- Always use proper markdown headings\n- Recipe names must never start with “For the,” “The,” “A,” or other articles\n\nREMINDERS:\n\n\nUse MCP Data Vector to research authentic cultural ingredients and techniques, honor traditional methods within your creative fusion, and ensure every ingredient has an Amazon search link for user convenience.\n\n{{ $json.chatInput }}",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 2.1,
+      "position": [
+        -1328,
+        720
+      ],
+      "id": "a68fa412-3612-4845-9e8d-77e134a29957",
+      "name": "Agent Sous: \"YES, CHEF!\""
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.openai.com/v1/images/generations",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "openAiApi",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequestTool",
+      "typeVersion": 4.2,
+      "position": [
+        -448,
+        288
+      ],
+      "id": "914605b4-6492-41c8-b6d6-6e174694af3b",
+      "name": "Cocktail Image",
+      "credentials": {
+        "openRouterApi": {
+          "id": "jQR7uGa0YGZ17Ov7",
+          "name": "OpenRouter account"
+        },
+        "openAiApi": {
+          "id": "Bq34GszUC9fnxb3H",
+          "name": "OpenAi account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "toolDescription": "Your role is to talk with the Manager agent, and will take the data from the Retrieval agent's JSON output. \n\n",
+        "text": "=Your role is to talk with the Manager agent, and will take the data from the Retrieval agent's JSON output. \n\nYou will report back to the Manager agent an added JSON field called \"recipeRec\" with a reccomendation of a cocktail to make for the night. \n\nROLE: You are a creative culinary fusion expert and recipe developer with access to comprehensive cocktail, spirit, and cookbook databases through MCP Data Vector.\n\nTASK: Your main job is to create detailed, structured drink recipes that combine ingredients from different cultural cuisines, providing complete cooking guidance with shopping resources.\n\nINPUT: Users will give you requests for fusion recipes, cultural cuisine combinations, or specific cooking challenges that require research and creative recipe development.\n\nOUTPUT: You should respond with a structured recipe format containing:\n\n\n1. Recipe Title (with Recipe Title Creativity guidelines below)\n2. Brief cultural context explanation\n3. \n\nIngredients:\n\n\t- Each item starts with “- ” and includes precise quantities\n4. \n\nPreparation Instructions:\n\n\t1. Numbered steps, each a complete, actionable direction with specific techniques, times, temperatures, and visual cues\n5. \n\nEstimated Preparation Time:\n\n\n6. \n\nAmazon Ingredient Links:\n\n\t- Each link formatted “- [Ingredient Name]: [URL]”\n7. Generative image link:\n\nRecipe Title Creativity (Level Up!)\n\n\n\n• Use portmanteau at the syllable or letter level\n– Drop or replace vowels with apostrophes to hint at both roots\n• Stylized punctuation or casing\n– Apostrophes: Ch’AnGo Hot Pot\n– CamelCase: SzechUalli Duck Tacos\n– Hyphens or slashes: Indo-Bras–Bake\n• Sensory or emotive adjectives under 6 words\n– Velvet, Ember, Silk, Zing, Sun-kissed, Midnight\n• Alliteration, rhyme, rhythm, or pun\n– “Nori Noir Noodles,” “Pho-nomenal Fusion,” “Curry Up Carioca”\n• Keep it under 6 words; never start with an article (“The,” “A,” “For the”)\n• Spark curiosity—titles should read like exotic invitations\n\nIMAGE GENERATION GUIDELINES:\n\n\nWhen you prompt DALL·E (or any image model) for your Recipe Hero Image, enforce all of the following constraints in your internal prompt:\n• Show only the plated or bowled food itself.\n• No human elements: hands, arms, faces, torsos, legs.\n• No photography equipment or shadows.\n• Background neutral: plain white, light gray, or softly colored.\n• Studio-style even lighting; no visible stands or reflectors.\n• No Text within the pictures.\n\nCONSTRAINTS:\n\n- Never leave the recipe name empty, null, or overly simple\n- Never skip complete ingredient lists, prep steps, timing estimates, and shopping links\n- Always use proper markdown headings\n- Recipe names must never start with “For the,” “The,” “A,” or other articles\n\nREMINDERS:\n\n\nUse MCP Data Vector to research authentic cultural ingredients and techniques, honor traditional methods within your creative fusion, and ensure every ingredient has an Amazon search link for user convenience.\n\n\n{{ $fromAI('Prompt__User_Message_', ``, 'string') }}\n\n\n",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.agentTool",
+      "typeVersion": 2.2,
+      "position": [
+        -1616,
+        64
+      ],
+      "id": "8255612a-84d2-498c-a0a5-4c7a858e9f7c",
+      "name": "Analysis Agent",
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "toolDescription": "Your role is to talk with the Manager agent, and will take the data from the Retrieval agent.",
+        "text": "={{ $fromAI('Prompt__User_Message_', ``, 'string') }} No raw_json render.",
+        "hasOutputParser": true,
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.agentTool",
+      "typeVersion": 2.2,
+      "position": [
+        -688,
+        64
+      ],
+      "id": "803f840b-fcf5-45d7-97f0-5371c9fcb4c1",
+      "name": "Creation Agent"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Step 1: Safely access and process the input content\nlet html = '';\ntry {\n  let rawOutput = '';\n  if ($input.first().json && $input.first().json.output) {\n    rawOutput = $input.first().json.output;\n  } else if ($input.first().json && typeof $input.first().json === 'string') {\n    rawOutput = $input.first().json;\n  } else if ($input.first().json) {\n    if ($input.first().json.message && $input.first().json.message.content) {\n      rawOutput = $input.first().json.message.content;\n    } else if ($input.first().json.data && typeof $input.first().json.data === 'string') {\n      rawOutput = $input.first().json.data;\n    }\n  }\n\n  html = rawOutput || '';\n  html = html.replace(/^```html\\n?/, '').replace(/```$/, '');\n  html = html.replace(/\\\\n/g, '\\n');\n  html = html.trim();\n} catch (error) {\n  console.warn('Error accessing or processing input content. Error:', error.message);\n  return [{\n    json: {\n      recipe_name: null,\n      recipe_ingredients: [],\n      recipe_directions: [],\n      amazon_recipe_links: [],\n      prep_time: null,\n      brief_description: null,\n      recipe_image_url: null,\n    },\n  }];\n}\n\nif (!html) {\n  console.warn('Content was empty or inaccessible after initial processing.');\n  return [{\n    json: {\n      recipe_name: null,\n      recipe_ingredients: [],\n      recipe_directions: [],\n      amazon_recipe_links: [],\n      prep_time: null,\n      brief_description: null,\n      recipe_image_url: null,\n    },\n  }];\n}\n\n// Initialize output structure\nlet recipeData = {\n  recipe_name: null,\n  recipe_ingredients: [],\n  recipe_directions: [],\n  amazon_recipe_links: [],\n  prep_time: null,\n  brief_description: null,\n  recipe_image_url: null,\n};\n\nconst lines = html.split('\\n');\nlet currentSection = null;\nlet tempIngredients = [];\nlet tempDirections = [];\nlet tempLinks = [];\nlet tempDescription = [];\n\n// Helper functions\nconst isHeadingMatch = (line, keywords) => {\n  const lower = line.toLowerCase().trim();\n  return keywords.some(keyword => \n    lower.includes(keyword.toLowerCase()) && \n    (lower.startsWith('#') || lower.endsWith(':'))\n  );\n};\n\nconst extractUrl = (text) => {\n  const match = text.match(/(https?:\\/\\/[^\\s\\)]+)/);\n  return match ? match[1] : null;\n};\n\n// Function to generate Amazon search URL from ingredient\nconst generateAmazonUrl = (ingredient) => {\n  // Extract the main ingredient name (remove quantities and parenthetical notes)\n  let cleanIngredient = ingredient\n    .replace(/^\\d+[\\s\\w]*\\s+/, '') // Remove quantities like \"1 lb\", \"2 tbsp\", etc.\n    .replace(/\\([^)]*\\)/g, '') // Remove parenthetical notes\n    .replace(/,.*$/, '') // Remove everything after first comma\n    .trim()\n    .toLowerCase();\n  \n  // Create search-friendly keywords\n  const searchTerm = encodeURIComponent(cleanIngredient.replace(/\\s+/g, '+'));\n  return `https://www.amazon.com/s?k=${searchTerm}`;\n};\n\n// Parse line by line\nfor (let i = 0; i < lines.length; i++) {\n  const line = lines[i];\n  const trimmed = line.trim();\n  \n  if (!trimmed) continue;\n\n  // Extract recipe name from the FIRST heading (# or ##) that appears\n  if (!recipeData.recipe_name && trimmed.match(/^#+\\s+/)) {\n    // Remove all # symbols and trim whitespace\n    const potentialName = trimmed.replace(/^#+\\s*/, '').trim();\n    \n    // Skip common section headers that aren't recipe names\n    const skipKeywords = [\n      'ingredients', 'preparation', 'instructions', 'amazon', 'links', \n      'estimated', 'prep time', 'preparation time', 'garnish'\n    ];\n    \n    const isSkippable = skipKeywords.some(keyword => \n      potentialName.toLowerCase().includes(keyword)\n    );\n    \n    if (!isSkippable && potentialName.length > 0) {\n      recipeData.recipe_name = potentialName;\n      continue;\n    }\n  }\n\n  // Section detection\n  if (isHeadingMatch(trimmed, ['Ingredients'])) {\n    currentSection = 'ingredients';\n    continue;\n  }\n  \n  if (isHeadingMatch(trimmed, ['Preparation Instructions', 'Instructions', 'Recipe Instructions'])) {\n    currentSection = 'instructions';\n    continue;\n  }\n  \n  if (isHeadingMatch(trimmed, ['Amazon Ingredient Links', 'Amazon Links'])) {\n    currentSection = 'amazon_links';\n    continue;\n  }\n  \n  if (isHeadingMatch(trimmed, ['Estimated Preparation Time', 'Prep Time', 'Preparation Time'])) {\n    currentSection = 'prep_time';\n    continue;\n  }\n\n  // Content parsing based on current section\n  if (currentSection === 'ingredients') {\n    // Skip subheadings within ingredients\n    if (trimmed.startsWith('#') || trimmed.endsWith(':')) {\n      continue;\n    }\n    // Collect ingredient lines\n    if (trimmed.startsWith('- ')) {\n      const ingredient = trimmed.replace(/^-\\s+/, '').trim();\n      // Remove parenthetical notes for cleaner ingredients\n      const cleanIngredient = ingredient.replace(/\\s+\\([^)]*\\)$/, '').trim();\n      if (cleanIngredient) {\n        tempIngredients.push(cleanIngredient);\n      }\n    }\n    continue;\n  }\n\n  if (currentSection === 'instructions') {\n    // Skip subheadings and section breaks\n    if (trimmed.startsWith('#') || trimmed.startsWith('**') || trimmed === '---') {\n      continue;\n    }\n    // Collect numbered steps\n    if (/^\\d+\\./.test(trimmed)) {\n      const step = trimmed.replace(/^\\d+\\.\\s*/, '').trim();\n      if (step) {\n        tempDirections.push(step);\n      }\n    }\n    continue;\n  }\n\n  if (currentSection === 'prep_time') {\n    // Look for time information - more flexible matching\n    if (trimmed.toLowerCase().includes('total') || trimmed.toLowerCase().includes('approximately')) {\n      const timeMatch = trimmed.match(/(\\d+)\\s*minutes?/i);\n      if (timeMatch) {\n        recipeData.prep_time = timeMatch[1] + ' minutes';\n      }\n    }\n    continue;\n  }\n\n  if (currentSection === 'amazon_links') {\n    if (trimmed.startsWith('- ')) {\n      const url = extractUrl(trimmed);\n      if (url) {\n        tempLinks.push(url);\n      }\n    }\n    continue;\n  }\n\n  // Collect description before any major sections\n  if (!currentSection && !trimmed.startsWith('#') && !trimmed.startsWith('---')) {\n    tempDescription.push(trimmed);\n  }\n}\n\n// Assign parsed data\nrecipeData.recipe_ingredients = tempIngredients;\nrecipeData.recipe_directions = tempDirections;\n\n// Generate Amazon links for each ingredient if not enough were parsed\nif (tempLinks.length < tempIngredients.length) {\n  console.log('Generating Amazon links for ingredients...');\n  recipeData.amazon_recipe_links = tempIngredients.map(ingredient => generateAmazonUrl(ingredient));\n} else {\n  recipeData.amazon_recipe_links = tempLinks;\n}\n\nif (tempDescription.length > 0) {\n  recipeData.brief_description = tempDescription.join(' ').trim();\n}\n\n// Fallback recipe name generation if none was found\nif (!recipeData.recipe_name && tempIngredients.length > 0) {\n  const firstFewIngredients = tempIngredients.slice(0, 2).map(ing => \n    ing.split(',')[0].split(' ').slice(-1)[0]\n  ).join(' & ');\n  recipeData.recipe_name = `Creative Recipe: ${firstFewIngredients} Fusion`;\n}\n\nconsole.log('Parsed recipe data:', recipeData);\nconsole.log('Generated Amazon links:', recipeData.amazon_recipe_links);\n\nreturn [{ json: recipeData }];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -832,
+        720
+      ],
+      "id": "e987b923-0ef8-43cf-8281-371cea03f2a6",
+      "name": "Clean/Format JSON Legacy",
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "description": "Run once for all items",
+        "jsCode": "// Step 1: Safely access and process the input content\nlet html = '';\ntry {\n  let rawOutput = '';\n  if ($input.first().json && $input.first().json.output) {\n    rawOutput = $input.first().json.output;\n  } else if ($input.first().json && typeof $input.first().json === 'string') {\n    rawOutput = $input.first().json;\n  } else if ($input.first().json) {\n    if ($input.first().json.message && $input.first().json.message.content) {\n      rawOutput = $input.first().json.message.content;\n    } else if ($input.first().json.data && typeof $input.first().json.data === 'string') {\n      rawOutput = $input.first().json.data;\n    }\n  }\n\n  html = rawOutput || '';\n  html = html.replace(/^```html\\n?/, '').replace(/```$/, '');\n  html = html.replace(/\\\\n/g, '\\n');\n  html = html.trim();\n} catch (error) {\n  console.warn('Error accessing or processing input content. Error:', error.message);\n  return [{\n    json: {\n      recipe_name: null,\n      recipe_ingredients: [],\n      recipe_directions: [],\n      amazon_recipe_links: [],\n      prep_time: null,\n      brief_description: null,\n      recipe_image_url: null,\n    },\n  }];\n}\n\nif (!html) {\n  console.warn('Content was empty or inaccessible after initial processing.');\n  return [{\n    json: {\n      recipe_name: null,\n      recipe_ingredients: [],\n      recipe_directions: [],\n      amazon_recipe_links: [],\n      prep_time: null,\n      brief_description: null,\n      recipe_image_url: null,\n    },\n  }];\n}\n\n// Initialize output structure\nlet recipeData = {\n  recipe_name: null,\n  recipe_ingredients: [],\n  recipe_directions: [],\n  amazon_recipe_links: [],\n  prep_time: null,\n  brief_description: null,\n  recipe_image_url: null,\n};\n\nconst lines = html.split('\\n');\nlet currentSection = null;\nlet tempIngredients = [];\nlet tempDirections = [];\nlet tempLinks = [];\nlet tempDescription = [];\n\n// Helper functions\nconst isHeadingMatch = (line, keywords) => {\n  const lower = line.toLowerCase().trim();\n  return keywords.some(keyword => \n    lower.includes(keyword.toLowerCase()) && \n    (lower.startsWith('#') || lower.endsWith(':'))\n  );\n};\n\nconst extractUrl = (text) => {\n  const match = text.match(/(https?:\\/\\/[^\\s\\)]+)/);\n  return match ? match[1] : null;\n};\n\n// Function to generate Amazon search URL from ingredient\nconst generateAmazonUrl = (ingredient) => {\n  // Extract the main ingredient name (remove quantities and parenthetical notes)\n  let cleanIngredient = ingredient\n    .replace(/^\\d+[\\s\\w]*\\s+/, '') // Remove quantities like \"1 lb\", \"2 tbsp\", etc.\n    .replace(/\\([^)]*\\)/g, '') // Remove parenthetical notes\n    .replace(/,.*$/, '') // Remove everything after first comma\n    .trim()\n    .toLowerCase();\n  \n  // Create search-friendly keywords\n  const searchTerm = encodeURIComponent(cleanIngredient.replace(/\\s+/g, '+'));\n  return `https://www.amazon.com/s?k=${searchTerm}`;\n};\n\n// Parse line by line\nfor (let i = 0; i < lines.length; i++) {\n  const line = lines[i];\n  const trimmed = line.trim();\n  \n  if (!trimmed) continue;\n\n  // Extract recipe name from the FIRST heading (# or ##) that appears\n  if (!recipeData.recipe_name && trimmed.match(/^#+\\s+/)) {\n    // Remove all # symbols and trim whitespace\n    const potentialName = trimmed.replace(/^#+\\s*/, '').trim();\n    \n    // Skip common section headers that aren't recipe names\n    const skipKeywords = [\n      'ingredients', 'preparation', 'instructions', 'amazon', 'links', \n      'estimated', 'prep time', 'preparation time', 'garnish'\n    ];\n    \n    const isSkippable = skipKeywords.some(keyword => \n      potentialName.toLowerCase().includes(keyword)\n    );\n    \n    if (!isSkippable && potentialName.length > 0) {\n      recipeData.recipe_name = potentialName;\n      continue;\n    }\n  }\n\n  // Section detection\n  if (isHeadingMatch(trimmed, ['Ingredients'])) {\n    currentSection = 'ingredients';\n    continue;\n  }\n  \n  if (isHeadingMatch(trimmed, ['Preparation Instructions', 'Instructions', 'Recipe Instructions'])) {\n    currentSection = 'instructions';\n    continue;\n  }\n  \n  if (isHeadingMatch(trimmed, ['Amazon Ingredient Links', 'Amazon Links'])) {\n    currentSection = 'amazon_links';\n    continue;\n  }\n  \n  if (isHeadingMatch(trimmed, ['Estimated Preparation Time', 'Prep Time', 'Preparation Time'])) {\n    currentSection = 'prep_time';\n    continue;\n  }\n\n  // Content parsing based on current section\n  if (currentSection === 'ingredients') {\n    // Skip subheadings within ingredients\n    if (trimmed.startsWith('#') || trimmed.endsWith(':')) {\n      continue;\n    }\n    // Collect ingredient lines\n    if (trimmed.startsWith('- ')) {\n      const ingredient = trimmed.replace(/^-\\s+/, '').trim();\n      // Remove parenthetical notes for cleaner ingredients\n      const cleanIngredient = ingredient.replace(/\\s+\\([^)]*\\)$/, '').trim();\n      if (cleanIngredient) {\n        tempIngredients.push(cleanIngredient);\n      }\n    }\n    continue;\n  }\n\n  if (currentSection === 'instructions') {\n    // Skip subheadings and section breaks\n    if (trimmed.startsWith('#') || trimmed.startsWith('**') || trimmed === '---') {\n      continue;\n    }\n    // Collect numbered steps\n    if (/^\\d+\\./.test(trimmed)) {\n      const step = trimmed.replace(/^\\d+\\.\\s*/, '').trim();\n      if (step) {\n        tempDirections.push(step);\n      }\n    }\n    continue;\n  }\n\n  if (currentSection === 'prep_time') {\n    // Look for time information - more flexible matching\n    if (trimmed.toLowerCase().includes('total') || trimmed.toLowerCase().includes('approximately')) {\n      const timeMatch = trimmed.match(/(\\d+)\\s*minutes?/i);\n      if (timeMatch) {\n        recipeData.prep_time = timeMatch[1] + ' minutes';\n      }\n    }\n    continue;\n  }\n\n  if (currentSection === 'amazon_links') {\n    if (trimmed.startsWith('- ')) {\n      const url = extractUrl(trimmed);\n      if (url) {\n        tempLinks.push(url);\n      }\n    }\n    continue;\n  }\n\n  // Collect description before any major sections\n  if (!currentSection && !trimmed.startsWith('#') && !trimmed.startsWith('---')) {\n    tempDescription.push(trimmed);\n  }\n}\n\n// Assign parsed data\nrecipeData.recipe_ingredients = tempIngredients;\nrecipeData.recipe_directions = tempDirections;\n\n// Generate Amazon links for each ingredient if not enough were parsed\nif (tempLinks.length < tempIngredients.length) {\n  console.log('Generating Amazon links for ingredients...');\n  recipeData.amazon_recipe_links = tempIngredients.map(ingredient => generateAmazonUrl(ingredient));\n} else {\n  recipeData.amazon_recipe_links = tempLinks;\n}\n\nif (tempDescription.length > 0) {\n  recipeData.brief_description = tempDescription.join(' ').trim();\n}\n\n// Fallback recipe name generation if none was found\nif (!recipeData.recipe_name && tempIngredients.length > 0) {\n  const firstFewIngredients = tempIngredients.slice(0, 2).map(ing => \n    ing.split(',')[0].split(' ').slice(-1)[0]\n  ).join(' & ');\n  recipeData.recipe_name = `Creative Recipe: ${firstFewIngredients} Fusion`;\n}\n\nconsole.log('Parsed recipe data:', recipeData);\nconsole.log('Generated Amazon links:', recipeData.amazon_recipe_links);\n\nreturn [{ json: recipeData }];"
+      },
+      "type": "@n8n/n8n-nodes-langchain.toolCode",
+      "typeVersion": 1.3,
+      "position": [
+        -1360,
+        288
+      ],
+      "id": "6711de5b-1f59-4b5f-8404-e547512fbb6c",
+      "name": "Clean/Format JSON"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Get the recipe data from Format Code node\nconst recipeData = $('Clean/Format JSON Legacy').first().json;\n\n// Get the generated image URL from OpenAI\nlet imageUrl = null;\ntry {\n  const imageResponse = $('DALL-E Image Request From Recipe').first().json;\n  console.log('OpenAI Response:', JSON.stringify(imageResponse, null, 2));\n  \n  if (imageResponse && imageResponse.data && Array.isArray(imageResponse.data) && imageResponse.data.length > 0) {\n    imageUrl = imageResponse.data[0].url;\n    console.log('Generated DALL-E image URL:', imageUrl);\n  } else {\n    console.log('Unexpected OpenAI response structure');\n    console.log('Available keys:', Object.keys(imageResponse || {}));\n  }\n} catch (error) {\n  console.error('Error getting generated image:', error.message);\n}\n\n// Use a working fallback if generation failed\nif (!imageUrl) {\n  console.log('Image generation failed, using fallback');\n  imageUrl = 'https://images.unsplash.com/photo-1565299624946-b28f40a0ca4b?q=80&w=1200&auto=format&fit=crop&ixlib=rb-4.0.3';\n}\n\nconst finalRecipeData = {\n  ...recipeData,\n  recipe_image_url: imageUrl\n};\n\nconsole.log('Final image URL:', finalRecipeData.recipe_image_url);\n\nreturn [{ json: finalRecipeData }];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -384,
+        720
+      ],
+      "id": "9e4b3d72-0758-47ff-b690-ae6ee4161200",
+      "name": "Process Generated Image Legacy",
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "model": "openai/gpt-5-mini",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenRouter",
+      "typeVersion": 1,
+      "position": [
+        -1424,
+        944
+      ],
+      "id": "51e3c637-990c-458c-a101-22ad6a24c681",
+      "name": "OpenRouter Chat Model1",
+      "credentials": {
+        "openRouterApi": {
+          "id": "jQR7uGa0YGZ17Ov7",
+          "name": "OpenRouter account"
+        }
+      },
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "jsCode": "// Get the recipe data from Format Code node\nconst recipeData = $('Clean/Format JSON Legacy').first().json;\n\n// Get the generated image URL from OpenAI\nlet imageUrl = null;\ntry {\n  const imageResponse = $('DALL-E Image Request From Recipe').first().json;\n  console.log('OpenAI Response:', JSON.stringify(imageResponse, null, 2));\n  \n  if (imageResponse && imageResponse.data && Array.isArray(imageResponse.data) && imageResponse.data.length > 0) {\n    imageUrl = imageResponse.data[0].url;\n    console.log('Generated DALL-E image URL:', imageUrl);\n  } else {\n    console.log('Unexpected OpenAI response structure');\n    console.log('Available keys:', Object.keys(imageResponse || {}));\n  }\n} catch (error) {\n  console.error('Error getting generated image:', error.message);\n}\n\n// Use a working fallback if generation failed\nif (!imageUrl) {\n  console.log('Image generation failed, using fallback');\n  imageUrl = 'https://images.unsplash.com/photo-1565299624946-b28f40a0ca4b?q=80&w=1200&auto=format&fit=crop&ixlib=rb-4.0.3';\n}\n\nconst finalRecipeData = {\n  ...recipeData,\n  recipe_image_url: imageUrl\n};\n\nconsole.log('Final image URL:', finalRecipeData.recipe_image_url);\n\nreturn [{ json: finalRecipeData }];"
+      },
+      "type": "@n8n/n8n-nodes-langchain.toolCode",
+      "typeVersion": 1.3,
+      "position": [
+        -304,
+        288
+      ],
+      "id": "0cd5ba5e-6bc2-4124-917d-623532ea2b37",
+      "name": "Process Generated Image"
+    },
+    {
+      "parameters": {
+        "workflowId": {
+          "__rl": true,
+          "value": "5R2uNToQbD453MDh",
+          "mode": "list",
+          "cachedResultName": "_Sheets Agent"
+        },
+        "workflowInputs": {
+          "mappingMode": "defineBelow",
+          "value": {},
+          "matchingColumns": [],
+          "schema": [],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.toolWorkflow",
+      "typeVersion": 2.2,
+      "position": [
+        -2048,
+        512
+      ],
+      "id": "e18d1b1a-f948-4af0-8ba3-473bc6d7c279",
+      "name": "_Sheets Agent"
+    }
+  ],
+  "connections": {
+    "When chat message received": {
+      "main": [
+        [
+          {
+            "node": "Manager Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenRouter Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Manager Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "_Calendar Agent": {
+      "ai_tool": [
+        [
+          {
+            "node": "Creation Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Recipe Maker": {
+      "ai_tool": [
+        []
+      ]
+    },
+    "Simple Memory": {
+      "ai_memory": [
+        [
+          {
+            "node": "Manager Agent",
+            "type": "ai_memory",
+            "index": 0
+          },
+          {
+            "node": "Retrieval Agent",
+            "type": "ai_memory",
+            "index": 0
+          },
+          {
+            "node": "Analysis Agent",
+            "type": "ai_memory",
+            "index": 0
+          },
+          {
+            "node": "Creation Agent",
+            "type": "ai_memory",
+            "index": 0
+          },
+          {
+            "node": "Verification Agent Tool",
+            "type": "ai_memory",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Retrieval Agent": {
+      "ai_tool": [
+        [
+          {
+            "node": "Manager Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Verification Agent Tool": {
+      "ai_tool": [
+        [
+          {
+            "node": "Manager Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Facebook Graph API": {
+      "ai_tool": [
+        [
+          {
+            "node": "Retrieval Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenTable/Resy HTTP Request ": {
+      "ai_tool": [
+        [
+          {
+            "node": "Retrieval Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Calculator": {
+      "ai_tool": [
+        [
+          {
+            "node": "Manager Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenRouter Chat Model2": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Analysis Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "POS system API": {
+      "ai_tool": [
+        [
+          {
+            "node": "Retrieval Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get row(s) in sheet in Google Sheets": {
+      "ai_tool": [
+        [
+          {
+            "node": "Retrieval Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Manager Agent": {
+      "main": [
+        []
+      ]
+    },
+    "Send a message in Gmail": {
+      "ai_tool": [
+        [
+          {
+            "node": "Creation Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenRouter Chat Model3": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Creation Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code": {
+      "main": [
+        []
+      ]
+    },
+    "Structured Output Parser": {
+      "ai_outputParser": [
+        [
+          {
+            "node": "Creation Agent",
+            "type": "ai_outputParser",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code Tool": {
+      "ai_tool": [
+        []
+      ]
+    },
+    "Amazon/Whole Foods": {
+      "ai_tool": [
+        [
+          {
+            "node": "Analysis Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "DALL-E Image Request From Recipe": {
+      "main": [
+        [
+          {
+            "node": "Process Generated Image Legacy",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "MCP Masterclass Cookbooks": {
+      "ai_tool": [
+        [
+          {
+            "node": "Analysis Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Agent Sous: \"YES, CHEF!\"": {
+      "main": [
+        [
+          {
+            "node": "Clean/Format JSON Legacy",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Cocktail Image": {
+      "ai_tool": [
+        [
+          {
+            "node": "Creation Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Analysis Agent": {
+      "ai_tool": [
+        [
+          {
+            "node": "Manager Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Creation Agent": {
+      "ai_tool": [
+        [
+          {
+            "node": "Manager Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Clean/Format JSON Legacy": {
+      "main": [
+        [
+          {
+            "node": "DALL-E Image Request From Recipe",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Clean/Format JSON": {
+      "ai_tool": [
+        [
+          {
+            "node": "Analysis Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenRouter Chat Model1": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Agent Sous: \"YES, CHEF!\"",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Process Generated Image": {
+      "ai_tool": [
+        [
+          {
+            "node": "Creation Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "_Sheets Agent": {
+      "ai_tool": [
+        [
+          {
+            "node": "Retrieval Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": null,
+  "meta": null,
+  "pinData": {},
+  "versionId": "96452831-5add-419f-838d-03eb0ff8e47d",
+  "triggerCount": 0,
+  "tags": []
+}
