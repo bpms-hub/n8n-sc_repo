@@ -1,0 +1,217 @@
+{
+  "createdAt": "2025-08-02T22:10:43.323Z",
+  "updatedAt": "2025-08-02T22:37:00.000Z",
+  "id": "zPieSM2mcn3Oi1f9",
+  "name": "Week 1 - Webook Form to HTML Render",
+  "active": false,
+  "isArchived": false,
+  "nodes": [
+    {
+      "parameters": {
+        "formTitle": "Task Generator AI Agent",
+        "formFields": {
+          "values": [
+            {
+              "fieldLabel": "Goal",
+              "placeholder": "Describe your goal",
+              "requiredField": true
+            }
+          ]
+        },
+        "responseMode": "lastNode",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.formTrigger",
+      "typeVersion": 2.2,
+      "position": [
+        -336,
+        -160
+      ],
+      "id": "4a63c04f-699e-45a1-abf2-b6516c172443",
+      "name": "On form submission",
+      "webhookId": "369dc246-515e-4f01-9b0e-e6648f0fc2e6"
+    },
+    {
+      "parameters": {
+        "modelId": {
+          "__rl": true,
+          "value": "gpt-4.1-mini",
+          "mode": "list",
+          "cachedResultName": "GPT-4.1-MINI"
+        },
+        "messages": {
+          "values": [
+            {
+              "content": "=You are an assitant that takes goals users want to achieve that are related to building their AI Agents and then converts them to a list of smaller achieveable tasks with a timeline. Here is the user goal: {{ $json.Goal }}. Always generate the tasks as bullet points with clear sections. Always generate text as a simple HTML template. Never return plain text, it has to be only HTML, and the tasks should be bulleted. Feel free to use inline css to make it look nicer. Never answer anything else unrelated to AI Agents. "
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.openAi",
+      "typeVersion": 1.8,
+      "position": [
+        112,
+        64
+      ],
+      "id": "a384dde2-968c-465a-929b-388e506f829e",
+      "name": "Message a model",
+      "credentials": {
+        "openAiApi": {
+          "id": "Bq34GszUC9fnxb3H",
+          "name": "OpenAi account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "// Step 1: Clean up the HTML as before\nlet html = $input.first().json.message.content;\nhtml = html.replace(/^```html\\n?/, '').replace(/```$/, '');\nhtml = html.replace(/\\\\n/g, '\\n');\nhtml = html.replace(/<style[\\s\\S]*?<\\/style>/, '');\nhtml = html.replace(/<head[\\s\\S]*?<\\/head>/, '');\nhtml = html.replace(/<!DOCTYPE html>\\n?/, '');\n\n// Step 2: Parse sections and descriptions\nlet sections = [];\nlet sectionRegex = /<h2>([\\s\\S]*?)<\\/h2>\\s*<ul>([\\s\\S]*?)<\\/ul>/g;\nlet match;\n\nwhile ((match = sectionRegex.exec(html)) !== null) {\n    let title = match[1].trim();\n    let ulContent = match[2];\n\n    // Extract <li> items\n    let items = [];\n    let liRegex = /<li>([\\s\\S]*?)<\\/li>/g;\n    let liMatch;\n    while ((liMatch = liRegex.exec(ulContent)) !== null) {\n        // Remove any inner HTML tags for plain text, or keep as HTML if you prefer\n        let description = liMatch[1].replace(/<[^>]+>/g, '').trim();\n        items.push(description);\n    }\n\n    sections.push({\n        title,\n        descriptions: items\n    });\n}\n\nreturn [{ json: { sections } }];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        512,
+        64
+      ],
+      "id": "d635a419-b0c6-477b-b160-c6611f350312",
+      "name": "clean up / regex / JSON parse"
+    },
+    {
+      "parameters": {
+        "path": "587107b7-7eba-40a4-804d-07555b39d3dd",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        -336,
+        64
+      ],
+      "id": "d185b268-1266-44be-8e04-87c789d47891",
+      "name": "Webhook",
+      "webhookId": "587107b7-7eba-40a4-804d-07555b39d3dd"
+    },
+    {
+      "parameters": {
+        "respondWith": "text",
+        "responseBody": "={{ $json.html }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.4,
+      "position": [
+        960,
+        64
+      ],
+      "id": "15724375-b5f8-4490-bfc6-07b6290e7c8a",
+      "name": "Respond to Webhook"
+    },
+    {
+      "parameters": {
+        "html": "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n  <meta charset=\"UTF-8\" />\n  <title>LinkedIn Resume Builder & Job Match</title>\n  <style>\n    /* 1) Center body content and set a comfortable max-width */\n    body {\n      font-family: Arial, sans-serif;\n      background: #f9f9f9;\n      margin: 0;\n      padding: .5em;\n      display: flex;\n      justify-content: center;\n    }\n    .container {\n      width: 100%;\n      max-width: 800px;\n      display: grid;\n      grid-template-columns: 1fr;\n      gap: 2em;\n    }\n    /* 2) On wider screens, turn into two-column layout */\n    @media (min-width: 600px) {\n      .container {\n        grid-template-columns: repeat(2, 1fr);\n      }\n    }\n    /* 3) Make sure headings span both columns */\n    .container > h1,\n    .container > h2 {\n      grid-column: 1 / -1;\n      margin: 0;\n    }\n\n    /* 4) Your existing styles */\n    h1 {\n      font-size: 1.5em;\n      color: #2a4d7a;\n      margin-bottom: 0.5em;\n    }\n    h2 {\n      font-size: 1.2em;\n      color: #2a4d7a;\n      margin-bottom: 1em;\n    }\n    .section {\n      background: #fff;\n      border-radius: 8px;\n      padding: 1.5em;\n      box-shadow: 0 2px 8px #eee;\n    }\n    .section-title {\n      font-size: 1.3em;\n      color: #2a4d7a;\n      margin-bottom: 0.5em;\n    }\n    .section ul {\n      margin: 0;\n      padding-left: 1.2em;\n    }\n    .section li {\n      margin-bottom: 0.5em;\n    }\n  </style>\n</head>\n<body>\n\n  <div class=\"container\">\n    <h1>LinkedIn Job Match/Resume Re-builder</h1>\n    <h2>n8n.io integration instructions</h2>\n\n    {{ $json.sections.map(section => `\n      <div class=\"section\">\n        <div class=\"section-title\">${section.title}</div>\n        <ul>\n          ${section.descriptions.map(desc => `<li>${desc}</li>`).join('')}\n        </ul>\n      </div>\n    `).join('') }}\n\n  </div>\n\n</body>\n</html>"
+      },
+      "type": "n8n-nodes-base.html",
+      "typeVersion": 1.2,
+      "position": [
+        736,
+        64
+      ],
+      "id": "135af47b-7319-4686-aee4-3451e6784f10",
+      "name": "HTML_RENDER"
+    },
+    {
+      "parameters": {
+        "mode": "raw",
+        "jsonOutput": "  {\n    \"Goal\": \"Automated LinkedIn search by job description form, and then matches user submitted markdown resume to job description, capabilities, and requirements of a LinkedIn Post.  Then, given the option through a telegram bot, can edit and send a curated resume and cover letter that fits the individual job application to get an over 75 rating on the accuracy and alignment between the job and the resume. Do not include the amount of approximate days each will take, but instaed break it down into what n8n components should be used at each phase\",\n    \"submittedAt\": \"2025-07-24T19:33:31.115-06:00\",\n    \"formMode\": \"test\"\n  }",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -112,
+        64
+      ],
+      "id": "2418b194-4f22-40ba-b6c7-d39327b73170",
+      "name": "Form Data"
+    }
+  ],
+  "connections": {
+    "Message a model": {
+      "main": [
+        [
+          {
+            "node": "clean up / regex / JSON parse",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "clean up / regex / JSON parse": {
+      "main": [
+        [
+          {
+            "node": "HTML_RENDER",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "Form Data",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTML_RENDER": {
+      "main": [
+        [
+          {
+            "node": "Respond to Webhook",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Form Data": {
+      "main": [
+        [
+          {
+            "node": "Message a model",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": null,
+  "meta": {
+    "templateCredsSetupCompleted": true
+  },
+  "pinData": {
+    "On form submission": [
+      {
+        "json": {
+          "Goal": "Automated LinkedIn search by job description form, and then matches user submitted markdown resume to job description, capabilities, and requirements of a LinkedIn Post.  Then, given the option through a telegram bot, can edit and send a curated resume and cover letter that fits the individual job application to get an over 75 rating on the accuracy and alignment between the job and the resume.",
+          "submittedAt": "2025-07-24T19:33:31.115-06:00",
+          "formMode": "test"
+        }
+      }
+    ]
+  },
+  "versionId": "ef4e710b-fd24-4cc5-82dc-4752b0001832",
+  "triggerCount": 0,
+  "tags": []
+}
