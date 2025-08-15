@@ -341,7 +341,7 @@
   },
   "createdAt": "2025-08-15T16:02:53.864Z",
   "id": "Ghc9oMzv2o6a5x0N",
-  "isArchived": false,
+  "isArchived": true,
   "meta": null,
   "name": "*Week 3 | Multi-Agent 「 OPTIMIZED 」",
   "nodes": [
@@ -949,6 +949,6 @@
   "staticData": null,
   "tags": [],
   "triggerCount": 0,
-  "updatedAt": "2025-08-15T16:02:53.864Z",
-  "versionId": "057451d0-8853-4288-9297-63bdbed282a6"
+  "updatedAt": "2025-08-15T16:27:57.000Z",
+  "versionId": "226fb3c9-9755-4fe6-ab61-391d1c27a1e2"
 }
