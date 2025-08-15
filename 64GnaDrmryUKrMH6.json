@@ -341,7 +341,7 @@
   },
   "createdAt": "2025-08-15T17:29:04.586Z",
   "id": "64GnaDrmryUKrMH6",
-  "isArchived": false,
+  "isArchived": true,
   "meta": {
     "templateId": "5898"
   },
@@ -499,7 +499,7 @@
           "mode": "name",
           "value": "={{ $('Switch').item.json.repo.name }}"
         },
-        "filePath": "={{$('Switch').first().json.id}}.json",
+        "filePath": "=/{{ $('Switch').first().json.id }}.json",
         "fileContent": "={{$('isDiffOrNew').item.json[\"n8n_data_stringy\"]}}",
         "commitMessage": "={{$('Switch').first().json.name}} ({{$json.github_status}})"
       },
@@ -534,7 +534,7 @@
           "mode": "name",
           "value": "={{ $('Switch').item.json.repo.name }}"
         },
-        "filePath": "={{$('Switch').first().json.id}}.json",
+        "filePath": "=/{{ $('Switch').first().json.id }}.json",
         "fileContent": "={{$('isDiffOrNew').item.json[\"n8n_data_stringy\"]}}",
         "commitMessage": "={{$('Switch').first().json.name}} ({{$json.github_status}})"
       },
@@ -619,7 +619,7 @@
           "mode": "name",
           "value": "={{ $json.repo.name }}"
         },
-        "filePath": "={{ $('Switch').item.json.id }}.json",
+        "filePath": "=/{{ $('Switch').item.json.id }}.json",
         "asBinaryProperty": false,
         "additionalParameters": {}
       },
@@ -730,7 +730,8 @@
           "__rl": true,
           "mode": "name",
           "value": "={{ $('Globals').item.json.repo.name }}"
-        }
+        },
+        "filePath": "={{ $('Globals').item.json.repo.path }}"
       },
       "id": "fba69d35-d05b-45a1-bdd9-93a83fddf63e",
       "name": "List files",
@@ -981,7 +982,7 @@
           "mode": "name",
           "value": "={{ $('Switch').item.json.repo.name }}"
         },
-        "filePath": "={{$('Switch').first().json.name}}",
+        "filePath": "=/{{ $('Switch').first().json.name }}.json",
         "commitMessage": "={{$('Switch').first().json.name}} (deleted)"
       },
       "id": "c08dde95-3a3a-4ac1-a92b-c9bcd5c7743b",
@@ -1171,6 +1172,6 @@
   "staticData": null,
   "tags": [],
   "triggerCount": 0,
-  "updatedAt": "2025-08-15T17:33:14.000Z",
-  "versionId": "44c8ae92-cac6-4598-9a1c-0caa6694936d"
+  "updatedAt": "2025-08-15T17:48:24.000Z",
+  "versionId": "76a6b720-61ea-4b17-b12b-5e1df69cdeb6"
 }
