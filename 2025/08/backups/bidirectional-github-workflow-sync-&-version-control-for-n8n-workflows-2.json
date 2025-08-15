@@ -1,9 +1,9 @@
 {
   "createdAt": "2025-08-15T00:13:02.472Z",
-  "updatedAt": "2025-08-15T00:36:38.000Z",
+  "updatedAt": "2025-08-15T01:01:07.000Z",
   "id": "HtssylUPoQv8KtfH",
   "name": "Bidirectional GitHub Workflow Sync & Version Control for n8n Workflows 2",
-  "active": false,
+  "active": true,
   "isArchived": false,
   "nodes": [
     {
@@ -23,7 +23,7 @@
       "credentials": {
         "n8nApi": {
           "id": "Rc0MxEUfVJEHL0o4",
-          "name": "n8n account 2"
+          "name": "n8n account"
         }
       }
     },
@@ -31,12 +31,7 @@
       "parameters": {
         "rule": {
           "interval": [
-            {
-              "field": "weeks",
-              "triggerAtDay": [
-                1
-              ]
-            }
+            {}
           ]
         }
       },
@@ -45,7 +40,7 @@
       "type": "n8n-nodes-base.scheduleTrigger",
       "position": [
         368,
-        240
+        256
       ],
       "typeVersion": 1.2
     },
@@ -70,8 +65,8 @@
       "name": "List files from repo",
       "type": "n8n-nodes-base.github",
       "position": [
-        992,
-        368
+        816,
+        352
       ],
       "webhookId": "0614066f-212d-4f9e-9da2-fa4a80b44baf",
       "typeVersion": 1,
@@ -79,7 +74,7 @@
       "credentials": {
         "githubOAuth2Api": {
           "id": "oXIY9B70fSML3C9r",
-          "name": "GitHub account 2"
+          "name": "GitHub account"
         }
       }
     },
@@ -92,14 +87,14 @@
       "name": "n8n",
       "type": "n8n-nodes-base.n8n",
       "position": [
-        1216,
-        160
+        816,
+        192
       ],
       "typeVersion": 1,
       "credentials": {
         "n8nApi": {
           "id": "Rc0MxEUfVJEHL0o4",
-          "name": "n8n account 2"
+          "name": "n8n account"
         }
       }
     },
@@ -107,6 +102,7 @@
       "parameters": {
         "authentication": "oAuth2",
         "resource": "file",
+        "operation": "edit",
         "owner": {
           "__rl": true,
           "mode": "name",
@@ -119,12 +115,7 @@
         },
         "filePath": "={{ $('Set GitHub Details').item.json.repo_workflows_path }}/{{ $node['Edit for Upload'].json.fileName }}",
         "fileContent": "={{ $('To base64').item.json.data }}",
-        "commitMessage": "=n8n_backup_sync-{{ $node['Edit for Upload'].json.commitDate }}",
-        "additionalParameters": {
-          "branch": {
-            "branch": "main"
-          }
-        }
+        "commitMessage": "=n8n_backup_sync-{{ $node['Edit for Upload'].json.commitDate }}"
       },
       "id": "404e87cf-e561-4807-865a-26a6109c228f",
       "name": "Upload file",
@@ -138,7 +129,7 @@
       "credentials": {
         "githubOAuth2Api": {
           "id": "oXIY9B70fSML3C9r",
-          "name": "GitHub account 2"
+          "name": "GitHub account"
         }
       }
     },
@@ -191,6 +182,7 @@
     },
     {
       "parameters": {
+        "authentication": "oAuth2",
         "resource": "file",
         "operation": "edit",
         "owner": {
@@ -211,14 +203,14 @@
       "name": "Update file",
       "type": "n8n-nodes-base.github",
       "position": [
-        3856,
-        528
+        3872,
+        496
       ],
       "webhookId": "27218087-8df7-474d-a39f-70cfa9c34ec8",
       "typeVersion": 1,
       "credentials": {
-        "githubApi": {
-          "id": "lI9Om3wGaBvDimub",
+        "githubOAuth2Api": {
+          "id": "oXIY9B70fSML3C9r",
           "name": "GitHub account"
         }
       }
@@ -236,7 +228,7 @@
       "type": "n8n-nodes-base.convertToFile",
       "position": [
         3200,
-        528
+        496
       ],
       "typeVersion": 1.1
     },
@@ -249,8 +241,8 @@
       "name": "To base",
       "type": "n8n-nodes-base.extractFromFile",
       "position": [
-        3408,
-        528
+        3424,
+        496
       ],
       "typeVersion": 1
     },
@@ -270,8 +262,8 @@
       "name": "n8n vs GitHub",
       "type": "n8n-nodes-base.compareDatasets",
       "position": [
-        1888,
-        240
+        1936,
+        224
       ],
       "typeVersion": 2.3
     },
@@ -297,7 +289,7 @@
       "credentials": {
         "n8nApi": {
           "id": "Rc0MxEUfVJEHL0o4",
-          "name": "n8n account 2"
+          "name": "n8n account"
         }
       }
     },
@@ -325,7 +317,7 @@
       "type": "n8n-nodes-base.code",
       "position": [
         2752,
-        528
+        496
       ],
       "typeVersion": 2
     },
@@ -340,7 +332,7 @@
       "type": "n8n-nodes-base.set",
       "position": [
         2976,
-        528
+        496
       ],
       "typeVersion": 3.4
     },
@@ -397,8 +389,8 @@
       "name": "Edit for Update",
       "type": "n8n-nodes-base.set",
       "position": [
-        3632,
-        528
+        3648,
+        496
       ],
       "typeVersion": 3.4
     },
@@ -476,8 +468,8 @@
       "name": "Decode to json",
       "type": "n8n-nodes-base.set",
       "position": [
-        1744,
-        368
+        1712,
+        352
       ],
       "typeVersion": 3.4
     },
@@ -509,8 +501,8 @@
       "name": "Filter",
       "type": "n8n-nodes-base.filter",
       "position": [
-        1216,
-        368
+        1040,
+        352
       ],
       "typeVersion": 2.2
     },
@@ -545,12 +537,13 @@
       "type": "n8n-nodes-base.set",
       "position": [
         592,
-        240
+        256
       ],
       "typeVersion": 3.4
     },
     {
       "parameters": {
+        "authentication": "oAuth2",
         "resource": "file",
         "operation": "get",
         "owner": {
@@ -571,14 +564,14 @@
       "name": "Get a file",
       "type": "n8n-nodes-base.github",
       "position": [
-        1440,
-        368
+        1264,
+        352
       ],
       "webhookId": "71ad7d84-99cd-4fbd-a365-52537e69525b",
       "typeVersion": 1.1,
       "credentials": {
-        "githubApi": {
-          "id": "lI9Om3wGaBvDimub",
+        "githubOAuth2Api": {
+          "id": "oXIY9B70fSML3C9r",
           "name": "GitHub account"
         }
       }
@@ -590,8 +583,8 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        1600,
-        544
+        1488,
+        352
       ],
       "id": "5f6b7d97-82ef-4eda-9688-847cefa27b76",
       "name": "Code"
@@ -836,13 +829,17 @@
     }
   },
   "settings": {},
-  "staticData": null,
+  "staticData": {
+    "node:Schedule Trigger": {
+      "recurrenceRules": []
+    }
+  },
   "meta": {
     "templateId": "5081",
     "templateCredsSetupCompleted": true
   },
   "pinData": {},
-  "versionId": "25f00035-ad7b-4935-b271-6d8d427e35f8",
-  "triggerCount": 0,
+  "versionId": "9fe1dfa5-aa77-4c59-8b83-829f79711ef8",
+  "triggerCount": 1,
   "tags": []
 }
