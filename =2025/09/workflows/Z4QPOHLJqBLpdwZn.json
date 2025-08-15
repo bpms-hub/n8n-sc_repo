@@ -1,0 +1,64 @@
+{
+  "active": false,
+  "connections": {
+    "When chat message received": {
+      "main": [
+        [
+          {
+            "node": "TEST CODE",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "createdAt": "2025-08-15T00:53:04.237Z",
+  "id": "Z4QPOHLJqBLpdwZn",
+  "isArchived": true,
+  "meta": null,
+  "name": "TEST_WORKFLOW",
+  "nodes": [
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.chatTrigger",
+      "typeVersion": 1.1,
+      "position": [
+        0,
+        0
+      ],
+      "id": "14e5a9b9-f675-4721-8577-932856cc75ba",
+      "name": "When chat message received",
+      "webhookId": "45ced4e6-c386-4f30-98c2-059b0cc48038"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 2.1,
+      "position": [
+        208,
+        0
+      ],
+      "id": "f79f5531-1a2b-423a-96ef-b6545e538c80",
+      "name": "TEST CODE"
+    }
+  ],
+  "origin": "n8n",
+  "pinData": {},
+  "repo": {
+    "owner": "bpms-hub",
+    "name": "n8n-vc_repo"
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": null,
+  "tags": [],
+  "triggerCount": 0,
+  "updatedAt": "2025-08-15T16:28:03.000Z",
+  "versionId": "04d926a9-0564-4318-9806-a23bf6690d33"
+}
