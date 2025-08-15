@@ -100,7 +100,7 @@
   },
   "createdAt": "2025-08-15T00:36:41.125Z",
   "id": "xmqHPKv5bxCb3s0O",
-  "isArchived": false,
+  "isArchived": true,
   "meta": null,
   "name": "Blotato Posting",
   "nodes": [
@@ -728,6 +728,6 @@
   "staticData": null,
   "tags": [],
   "triggerCount": 0,
-  "updatedAt": "2025-08-15T00:36:41.125Z",
-  "versionId": "0ca0bccd-512e-4e27-904b-aa2ce1386d66"
+  "updatedAt": "2025-08-15T16:28:07.000Z",
+  "versionId": "396efb55-b20f-4ec9-9c21-c1940af550d3"
 }
